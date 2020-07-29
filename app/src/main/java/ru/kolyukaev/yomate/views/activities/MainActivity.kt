@@ -10,14 +10,7 @@ import android.widget.Toast
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import ru.kolyukaev.yomate.R
-import ru.kolyukaev.yomate.log
-import ru.kolyukaev.yomate.models.link.RestClient
-import ru.kolyukaev.yomate.models.link.api.WeatherService
-import ru.kolyukaev.yomate.models.link.response.MainResponse
 import ru.kolyukaev.yomate.presenters.MainWeatherPresenter
 import ru.kolyukaev.yomate.views.MainWeatherView
 
@@ -31,10 +24,6 @@ class MainActivity : MvpAppCompatActivity(), MainWeatherView {
     @InjectPresenter
     lateinit var mainWeatherPresenter: MainWeatherPresenter
 
-    var q = "Moscow"
-    var appid = "70a8211b10721a6d7056612c3ee346e9"
-    var units = "metric"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,7 +34,7 @@ class MainActivity : MvpAppCompatActivity(), MainWeatherView {
         mPbLoading = pb_loading
 
         mBtnUpdate.setOnClickListener {
-            mainWeatherPresenter.toUpdate(true)
+            mainWeatherPresenter.loadingWeather(true)
         }
     }
 
@@ -64,33 +53,10 @@ class MainActivity : MvpAppCompatActivity(), MainWeatherView {
         Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
     }
 
-    override fun weatherRequest() {
+    override fun weatherRequest(temperature: String, cloudiness: String) {
+        mTvTemperature.text = temperature
+        mTvCloudiness.text = cloudiness
 
-        val weatherService: WeatherService = RestClient.getRetrofit()
-        val call: Call<MainResponse> = weatherService.getWeatherData(q, appid, units)
-
-        call.enqueue(object : Callback<MainResponse> {
-            override fun onFailure(call: Call<MainResponse>, t: Throwable) {
-                log("${t.message}")
-                mTvTemperature.text = t.message
-            }
-
-            override fun onResponse(call: Call<MainResponse>, response: Response<MainResponse>) {
-                if (response.code() == 200) {
-                    val weatherResponse = response.body()!!
-
-                    val weatherTemp =
-                        "Temperature: " +
-                                weatherResponse.main!!.temp
-
-                    val weatherCloudiness = "Cloudiness " +
-                            weatherResponse.clouds!!.all
-
-                    mTvTemperature.text = weatherTemp
-                    mTvCloudiness.text = weatherCloudiness
-                }
-            }
-        })
     }
 
     override fun openDetailsWeather() {
