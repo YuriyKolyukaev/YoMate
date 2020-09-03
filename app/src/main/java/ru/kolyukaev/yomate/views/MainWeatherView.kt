@@ -11,6 +11,5 @@ interface MainWeatherView: MvpView {
     fun endLoading()
     fun showError(text: String)
     fun weatherRequest(temperature:String, cloudiness: String)
-    fun openDetailsWeather()
 
 }

@@ -3,4 +3,8 @@
     <string name="temperature">temperature</string>
     <string name="cloudiness">cloudiness</string>
     <string name="update">update</string>
+    <string name="details">details</string>
+    <string name="search_hint">Search</string>
+    <string name="enter_your_city">Enter your city</string>
+    <string name="city_no_items">city_no_items</string>
 </resources>

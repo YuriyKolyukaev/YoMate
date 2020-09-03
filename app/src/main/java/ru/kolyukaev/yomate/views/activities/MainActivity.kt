@@ -1,67 +1,71 @@
 package ru.kolyukaev.yomate.views.activities
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.OrientationHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.MvpAppCompatActivity
-import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.kolyukaev.yomate.R
-import ru.kolyukaev.yomate.presenters.MainWeatherPresenter
-import ru.kolyukaev.yomate.views.MainWeatherView
+import ru.kolyukaev.yomate.log
+import ru.kolyukaev.yomate.views.adapter.CityAdapter
+import ru.kolyukaev.yomate.views.fragments.CityFragment
+import ru.kolyukaev.yomate.views.fragments.MainFragment
 
-class MainActivity : MvpAppCompatActivity(), MainWeatherView {
+class MainActivity : MvpAppCompatActivity() {
 
-    private lateinit var mTvTemperature: TextView
-    private lateinit var mTvCloudiness: TextView
-    private lateinit var mBtnUpdate: Button
-    private lateinit var mPbLoading: ProgressBar
+    private var fragmentTransaction: FragmentManager? = null
+    private lateinit var mAdapter: CityAdapter
+    private lateinit var mRecyclerView: RecyclerView
 
-    @InjectPresenter
-    lateinit var mainWeatherPresenter: MainWeatherPresenter
-
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        log("onCreate (MainActivity)")
 
-        mTvTemperature = tv_temperature
-        mTvCloudiness = tv_cloudiness
-        mBtnUpdate = btn_update
-        mPbLoading = pb_loading
 
-        mBtnUpdate.setOnClickListener {
-            mainWeatherPresenter.loadingWeather(true)
+        mRecyclerView = DELETE_RECYCLER
+
+        fragmentTransaction = supportFragmentManager
+
+        setSupportActionBar(toolbar)
+
+        val fragment1 = MainFragment()
+
+        mAdapter = CityAdapter()
+        
+        mRecyclerView.adapter = mAdapter
+        mRecyclerView.layoutManager = LinearLayoutManager(applicationContext, OrientationHelper.VERTICAL, false)
+        mRecyclerView.setHasFixedSize(true)
+
+        commitFragmentTransaction(fragment1, "YoMate")
+        log("commitFragmentTransaction fragment1")
+    }
+
+    override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
+        menuInflater.inflate(R.menu.city_info_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_search) {
+            val fragment3 = CityFragment()
+            commitFragmentTransaction(fragment3, "Cities")
+            log("commitFragmentTransaction fragment3")
         }
+        return super.onOptionsItemSelected(item)
     }
 
-
-    override fun startLoading() {
-        mBtnUpdate.visibility = View.GONE
-        mPbLoading.visibility = View.VISIBLE
+    fun commitFragmentTransaction(fragment: Fragment, title: String) {
+        fragmentTransaction!!.beginTransaction()
+            .replace(R.id.container, fragment)
+            .commitNow()
+        supportActionBar?.title = title
     }
-
-    override fun endLoading() {
-        mBtnUpdate.visibility = View.VISIBLE
-        mPbLoading.visibility = View.GONE
-    }
-
-    override fun showError(text: String) {
-        Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun weatherRequest(temperature: String, cloudiness: String) {
-        mTvTemperature.text = temperature
-        mTvCloudiness.text = cloudiness
-
-    }
-
-    override fun openDetailsWeather() {
-        startActivity(Intent(applicationContext, DetailsActivity::class.java))
-    }
-
-
 }

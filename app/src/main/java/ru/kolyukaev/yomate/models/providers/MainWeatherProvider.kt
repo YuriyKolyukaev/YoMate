@@ -18,8 +18,6 @@ class MainWeatherProvider (var presenter: MainWeatherPresenter) {
         val weatherService: WeatherService = RestClient.getRetrofit()
         val call: Call<MainResponse> = weatherService.getWeatherData(mApiMethods.CITY, mApiMethods.KEY, mApiMethods.UNITS)
 
-
-
         call.enqueue(object : Callback<MainResponse> {
             override fun onFailure(call: Call<MainResponse>, t: Throwable) {
                 log("${t.message}")
