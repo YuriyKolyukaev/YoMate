@@ -15,20 +15,19 @@ class CityAdapter(
     private val listener: CitiesListener
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var mSourceList: ArrayList<City> = ArrayList()
-    private var mCityList: ArrayList<City> = ArrayList()
+    private var mSourceList: MutableList<City> = mutableListOf()
+    private var mCityList: MutableList<City> = mutableListOf()
 
-    fun setupCities(cityList: ArrayList<City>) {
+    fun setupCities(cities: List<City>) {
         mSourceList.clear()
-        mSourceList.addAll(cityList)
-
+        mSourceList.addAll(cities)
         filter(query = "")
     }
 
     fun filter(query: String) {
         mCityList.clear()
         mSourceList.forEach {
-            if (it.name.contains(query, ignoreCase = true)) {
+            if (it.city.contains(query, ignoreCase = true)) {
                 mCityList.add(it)
             }
         }
@@ -41,7 +40,7 @@ class CityAdapter(
         val viewHolder = CityViewHolder(itemView = itemView)
         itemView.setOnClickListener {
             val currentPosition = viewHolder.adapterPosition
-            val name = mCityList[currentPosition].name
+            val name = mCityList[currentPosition].city
             listener.onItemClick(name)
         }
         return viewHolder
@@ -53,16 +52,19 @@ class CityAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is CityViewHolder) {
-            holder.bind(cityModel = mCityList[position], context = context)
+            holder.bind(model = mCityList[position], context = context)
         }
     }
 
     class CityViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var mTvCityCell: TextView = itemView.tv_city_cell
+        private var mTvCountyCell: TextView = itemView.tv_country_cell
 
 
-        fun bind(cityModel: City, context: Context?) {
-            mTvCityCell.text = cityModel.name
+        fun bind(model: City, context: Context?) {
+            mTvCityCell.text = model.city
+            mTvCountyCell.text = model.country
+
         }
     }
 }

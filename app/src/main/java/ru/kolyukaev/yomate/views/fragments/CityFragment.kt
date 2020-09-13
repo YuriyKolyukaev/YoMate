@@ -11,9 +11,7 @@ import kotlinx.android.synthetic.main.fragment_city.*
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.City
 import ru.kolyukaev.yomate.gone
-import ru.kolyukaev.yomate.presenters.CitiesPresenter
 import ru.kolyukaev.yomate.viewmodels.CitiesViewModel
-import ru.kolyukaev.yomate.views.CitiesView
 import ru.kolyukaev.yomate.views.activities.MainActivity
 import ru.kolyukaev.yomate.views.adapter.CitiesListener
 import ru.kolyukaev.yomate.views.adapter.CityAdapter
@@ -21,12 +19,9 @@ import ru.kolyukaev.yomate.views.adapter.RecyclerItemClickListener
 import ru.kolyukaev.yomate.visible
 import java.io.InputStream
 
-class CityFragment : BaseFragment(), CitiesView, CitiesListener {
+class CityFragment : BaseFragment(), CitiesListener {
 
     private lateinit var mAdapter: CityAdapter
-
-    @InjectPresenter
-    lateinit var citiesPresenter: CitiesPresenter
 
     lateinit var citiesViewModel: CitiesViewModel
 
@@ -58,19 +53,19 @@ class CityFragment : BaseFragment(), CitiesView, CitiesListener {
 
         setEditTextChangeListener()
 
-        val inputStream1: InputStream = resources.openRawResource(R.raw.cities)
+        val inputStream: InputStream = resources.openRawResource(R.raw.citiesandcountry)
 
         citiesViewModel = ViewModelProvider(this).get(CitiesViewModel::class.java)
 
         citiesViewModel.citiesLiveData.observe(viewLifecycleOwner, Observer {
-            setupCitiesList(it as ArrayList<City>)
+            setupCitiesList(it)
             pb_load.gone()
         })
 
         citiesViewModel.mainWeatherLiveData.observe(viewLifecycleOwner, Observer {
         })
 
-        citiesViewModel.getCities(inputStream1)
+        citiesViewModel.getCities(inputStream)
 //        citiesViewModel.getWeathers()
     }
 
@@ -87,17 +82,8 @@ class CityFragment : BaseFragment(), CitiesView, CitiesListener {
         super.onDestroy()
     }
 
-    override fun startLoading(number: Int) {
-    }
-
-    override fun setupCitiesList(cities: ArrayList<City>) {
+    private fun setupCitiesList(cities: List<City>) {
         mAdapter.setupCities(cities)
-    }
-
-    override fun endLoading() {
-    }
-
-    override fun showError(text: String) {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -28,27 +28,35 @@ class CitiesViewModel : ViewModel() {
 
     fun getCities(citiesInputStream: InputStream) {
 
-
-
         // корутины
         viewModelScope.launch(Dispatchers.Default) {
             val citiesString = getCitiesFromFile(citiesInputStream)
-            val cities: List<City> = parseJsonToCitiesObject(citiesString)
+            val citiesMap: Map<String, List<String>> = parseJsonToCitiesObject(citiesString)
             log("fun viewModelScope.launch")
+            val citiesList = citiesMapToList(citiesMap)
 
-            val testCities = mutableListOf<City>()
-
-            for (i in 0..30) {
-                testCities.add(cities[i])
-            }
-
-            citiesLiveData.postValue(testCities)
+            citiesLiveData.postValue(citiesList)
         }
     }
 
-    fun parseJsonToCitiesObject(parsedJson: String?): List<City> {
+    private fun citiesMapToList(citiesMap: Map<String, List<String>>): List<City> {
+        val cities = mutableListOf<City>()
+        citiesMap.forEach { (country, citiesList) ->
+            citiesList.forEach { city ->
+                val cityModel = City(
+                    city = city,
+                    country = country
+                )
+                cities.add(cityModel)
+            }
+        }
+        return cities
+    }
+
+    fun parseJsonToCitiesObject(parsedJson: String?): Map<String, List<String>> {
         log("fun parseJsonToCitiesObject")
-        return Gson().fromJson(parsedJson, object : TypeToken<List<City>>() {}.type)
+        val data = Gson().fromJson<Map<String, List<String>>>(parsedJson, object : TypeToken<HashMap<String, List<String>>>() {}.type)
+        return data
     }
 
     fun getCitiesFromFile(citiesInputStream: InputStream): String? {
