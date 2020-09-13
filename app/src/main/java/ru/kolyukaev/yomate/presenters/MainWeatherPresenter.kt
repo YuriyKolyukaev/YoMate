@@ -2,25 +2,29 @@ package ru.kolyukaev.yomate.presenters
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
-import ru.kolyukaev.yomate.models.MainWeatherModel
-import ru.kolyukaev.yomate.models.providers.MainWeatherProvider
+import ru.kolyukaev.yomate.data.models.MainWeatherModel
+import ru.kolyukaev.yomate.data.providers.MainWeatherProvider
 import ru.kolyukaev.yomate.views.MainWeatherView
-import ru.kolyukaev.yomate.views.activities.MainActivity
 
 
 @InjectViewState
 class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
 
-    fun loadingWeather(isSuccess: Boolean) {
+    fun loadingWeatherCity(isSuccess: Boolean, name: String) {
+        if (name == "") {
+            var name: String = "Moscow"
+            loadingWeather(isSuccess, name)
+        } else loadingWeather(isSuccess, name)
+    }
+
+    fun loadingWeather(isSuccess: Boolean, name: String = "") {
         viewState.startLoading()
-        android.os.Handler().postDelayed({
             viewState.endLoading()
             if (isSuccess) {
-                MainWeatherProvider(presenter = this).loadWeather()
+                MainWeatherProvider(presenter = this).loadWeather(name)
             } else {
                 viewState.showError("Weather state is incorrect")
             }
-        }, 500)
     }
 
     fun weatherLoaded(weatherList: ArrayList<MainWeatherModel>) {

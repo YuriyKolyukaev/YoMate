@@ -1,8 +1,8 @@
-package ru.kolyukaev.yomate.models.link
+package ru.kolyukaev.yomate.data.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.kolyukaev.yomate.models.link.api.WeatherService
+import ru.kolyukaev.yomate.data.network.api.WeatherService
 
 class RestClient {
 

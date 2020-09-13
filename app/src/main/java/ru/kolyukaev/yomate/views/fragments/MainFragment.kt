@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.log
@@ -29,13 +30,29 @@ class MainFragment : BaseFragment(), MainWeatherView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        log("TEST_ARGUMENTS ${arguments?.getString("name")}")
+
+        val name = arguments?.getString("name")
+        if (name != null) getBundle(name)
+
         btn_update.setOnClickListener {
-            mainWeatherPresenter.loadingWeather(true)
+            mainWeatherPresenter.loadingWeatherCity(isSuccess = true, name = "")
         }
+
         btn_details.setOnClickListener {
-//            (activity as MainActivity).commitFragmentTransaction(DetailsFragment(), "Details")
             (activity as MainActivity).commitFragmentTransaction(CityFragment(), "City")
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).tv_toolbar.text = "YoMate"
+    }
+
+    fun getBundle(name: String) {
+        mainWeatherPresenter.loadingWeatherCity(true, name)
+        Toast.makeText(context, "Passed: ${name}", Toast.LENGTH_SHORT).show()
     }
 
     override fun startLoading() {

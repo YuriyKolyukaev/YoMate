@@ -1,128 +1,128 @@
-package ru.kolyukaev.yomate.models.link.response
+package ru.kolyukaev.yomate.data.network.response
 
 import com.google.gson.annotations.Expose
 
 import com.google.gson.annotations.SerializedName
 
-class MainResponse {
+data class MainResponse (
     @SerializedName("coord")
     @Expose
-    var coord: Coord? = null
+    var coord: Coord? = null,
     @SerializedName("weather")
     @Expose
-    var weather: List<Weather>? = null
+    var weather: List<Weather>? = null,
     @SerializedName("base")
     @Expose
-    var base: String? = null
+    var base: String? = null,
     @SerializedName("main")
     @Expose
-    var main: Main? = null
+    var main: Main? = null,
     @SerializedName("visibility")
     @Expose
-    var visibility = 0
+    var visibility: Int = 0,
     @SerializedName("wind")
     @Expose
-    var wind: Wind? = null
+    var wind: Wind? = null,
     @SerializedName("clouds")
     @Expose
-    var clouds: Clouds? = null
+    var clouds: Clouds? = null,
     @SerializedName("dt")
     @Expose
-    var dt = 0
+    var dt: Int = 0,
     @SerializedName("sys")
     @Expose
-    var sys: Sys? = null
+    var sys: Sys? = null,
     @SerializedName("timezone")
     @Expose
-    var timezone = 0
+    var timezone: Int = 0,
     @SerializedName("id")
     @Expose
-    var id = 0
+    var id: Int= 0,
     @SerializedName("name")
     @Expose
-    var name: String? = null
+    var name: String? = null,
     @SerializedName("cod")
     @Expose
-    var cod = 0
-}
+    var cod: Int = 0
+)
 
-class Clouds {
+data class Clouds (
     @SerializedName("all")
     @Expose
-    var all = 0
-}
+    var all: Int = 0
+)
 
-class Coord {
+data class Coord (
     @SerializedName("lon")
     @Expose
-    var lon = 0.0
+    var lon: Double = 0.0,
     @SerializedName("lat")
     @Expose
-    var lat = 0.0
-}
+    var lat: Double = 0.0
+)
 
-class Main {
+data class Main (
     @SerializedName("temp")
     @Expose
-    var temp = 0.0
+    var temp: Double = 0.0,
     @SerializedName("feels_like")
     @Expose
-    var feelsLike = 0.0
+    var feelsLike: Double = 0.0,
     @SerializedName("temp_min")
     @Expose
-    var tempMin = 0
+    var tempMin: Double = 0.0,
     @SerializedName("temp_max")
     @Expose
-    var tempMax = 0.0
+    var tempMax: Double = 0.0,
     @SerializedName("pressure")
     @Expose
-    var pressure = 0
+    var pressure: Int = 0,
     @SerializedName("humidity")
     @Expose
-    var humidity = 0
-}
+    var humidity: Int = 0
+)
 
-class Sys {
+data class Sys (
     @SerializedName("type")
     @Expose
-    var type = 0
+    var type: Int = 0,
     @SerializedName("id")
     @Expose
-    var id = 0
+    var id: Int = 0,
     @SerializedName("country")
     @Expose
-    var country: String? = null
+    var country: String? = null,
     @SerializedName("sunrise")
     @Expose
-    var sunrise = 0
+    var sunrise: Int = 0,
     @SerializedName("sunset")
     @Expose
-    var sunset = 0
-}
+    var sunset: Int = 0
+)
 
-class Weather {
+class Weather (
     @SerializedName("id")
     @Expose
-    var id = 0
+    var id: Int = 0,
     @SerializedName("main")
     @Expose
-    var main: String? = null
+    var main: String? = null,
     @SerializedName("description")
     @Expose
-    var description: String? = null
+    var description: String? = null,
     @SerializedName("icon")
     @Expose
     var icon: String? = null
-}
+)
 
-class Wind {
+class Wind (
     @SerializedName("speed")
     @Expose
-    var speed = 0
+    var speed: Double = 0.0,
     @SerializedName("deg")
     @Expose
-    var deg = 0
-}
+    var deg: Int = 0
+)
 
 
 

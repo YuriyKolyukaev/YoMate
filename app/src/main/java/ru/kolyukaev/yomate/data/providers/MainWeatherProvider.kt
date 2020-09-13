@@ -1,22 +1,22 @@
-package ru.kolyukaev.yomate.models.providers
+package ru.kolyukaev.yomate.data.providers
 
+import android.util.Log
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.kolyukaev.yomate.log
-import ru.kolyukaev.yomate.models.MainWeatherModel
-import ru.kolyukaev.yomate.models.link.RestClient
-import ru.kolyukaev.yomate.models.link.api.ApiMethods
-import ru.kolyukaev.yomate.models.link.api.WeatherService
-import ru.kolyukaev.yomate.models.link.response.MainResponse
+import ru.kolyukaev.yomate.data.models.MainWeatherModel
+import ru.kolyukaev.yomate.data.network.RestClient
+import ru.kolyukaev.yomate.data.network.api.ApiMethods
+import ru.kolyukaev.yomate.data.network.api.WeatherService
+import ru.kolyukaev.yomate.data.network.response.MainResponse
 import ru.kolyukaev.yomate.presenters.MainWeatherPresenter
 
 class MainWeatherProvider (var presenter: MainWeatherPresenter) {
-    val mApiMethods: ApiMethods = ApiMethods()
 
-    fun loadWeather() {
+    fun loadWeather(nameCity: String) {
         val weatherService: WeatherService = RestClient.getRetrofit()
-        val call: Call<MainResponse> = weatherService.getWeatherData(mApiMethods.CITY, mApiMethods.KEY, mApiMethods.UNITS)
+        val call: Call<MainResponse> = weatherService.getWeatherData(nameCity, ApiMethods.KEY, ApiMethods.UNITS)
 
         call.enqueue(object : Callback<MainResponse> {
             override fun onFailure(call: Call<MainResponse>, t: Throwable) {
@@ -27,6 +27,8 @@ class MainWeatherProvider (var presenter: MainWeatherPresenter) {
             override fun onResponse(call: Call<MainResponse>, response: Response<MainResponse>) {
                 if (response.code() == 200) {
                     val weatherResponse = response.body()!!
+                    log("name = $weatherResponse)")
+
 
                     val weatherList: ArrayList<MainWeatherModel> = ArrayList()
 
@@ -34,6 +36,9 @@ class MainWeatherProvider (var presenter: MainWeatherPresenter) {
                         temperature = weatherResponse.main!!.temp,
                         cloudiness = weatherResponse.clouds!!.all)
                     weatherList.add(weather)
+
+                    Log.e("TEST_TEST", "weather ${weatherResponse.base} ${weatherResponse.clouds} ${weatherResponse.cod} ${weatherResponse.main}")
+
 
                     presenter.weatherLoaded(weatherList)
                 }

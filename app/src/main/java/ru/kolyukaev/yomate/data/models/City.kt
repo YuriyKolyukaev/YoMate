@@ -1,4 +1,4 @@
-package ru.kolyukaev.yomate.models
+package ru.kolyukaev.yomate.data.models
 
 import com.google.gson.annotations.SerializedName
 
