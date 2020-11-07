@@ -18,8 +18,7 @@ import ru.kolyukaev.yomate.views.activities.MainActivity
 import ru.kolyukaev.yomate.views.adapter.CitiesListener
 import ru.kolyukaev.yomate.views.adapter.CityAdapter
 import ru.kolyukaev.yomate.views.adapter.RecyclerItemClickListener
-import ru.kolyukaev.yomate.visible
-import java.io.InputStream
+
 
 class CityFragment : BaseFragment(), CitiesView, CitiesListener {
 
@@ -44,21 +43,25 @@ class CityFragment : BaseFragment(), CitiesView, CitiesListener {
 
         val activity = (activity as MainActivity)
         activity.visibleToolbar()
+        activity.enlargeToolbar()
+        activity.goneCityandCountry()
+        activity.clearEditText()
 
-        mAdapter = CityAdapter(requireContext(),this)
+        mAdapter = CityAdapter(requireContext(), this)
         rv_city.adapter = mAdapter
         rv_city.layoutManager = LinearLayoutManager(context)
         rv_city.setHasFixedSize(true)
         rv_city.addOnItemTouchListener(
             RecyclerItemClickListener
                 (rv_city, object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(view: View, position: Int) {
-                    }
-                }))
+                override fun onItemClick(view: View, position: Int) {
+                }
+            })
+        )
 
         setEditTextChangeListener()
 
-        val inputStream1: InputStream = resources.openRawResource(R.raw.cities)
+        val inputStream = resources.openRawResource(R.raw.test_filemost)
 
         citiesViewModel = ViewModelProvider(this).get(CitiesViewModel::class.java)
 
@@ -70,12 +73,12 @@ class CityFragment : BaseFragment(), CitiesView, CitiesListener {
         citiesViewModel.mainWeatherLiveData.observe(viewLifecycleOwner, Observer {
         })
 
-        citiesViewModel.getCities(inputStream1)
+        citiesViewModel.getCities(inputStream)
 //        citiesViewModel.getWeathers()
     }
 
     private fun setEditTextChangeListener() {
-        (activity as? MainActivity?)?.onToolbarTextChanged =  { text ->
+        (activity as? MainActivity?)?.onToolbarTextChanged = { text ->
             mAdapter.filter(text)
         }
     }
@@ -84,6 +87,8 @@ class CityFragment : BaseFragment(), CitiesView, CitiesListener {
         // Очищаем ссылку при уничтожении фрагмента чтобы избежать утечки
         (activity as? MainActivity?)?.onToolbarTextChanged = null
         (activity as? MainActivity?)?.goneToolbar()
+        (activity as? MainActivity?)?.decrease()
+
         super.onDestroy()
     }
 
@@ -103,13 +108,15 @@ class CityFragment : BaseFragment(), CitiesView, CitiesListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.city_info_menu, menu)
         menu.clear()
-    }
+}
 
-    override fun onItemClick(name: String) {
+    override fun onItemClick(country: String, id: Int, name: String) {
         val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
         val mainFragment = MainFragment()
         val bundle = Bundle()
+        bundle.putInt("id", id)
         bundle.putString("name", name)
+        bundle.putString("country", country)
         mainFragment.arguments = bundle
         transaction.replace(R.id.container, mainFragment)
         transaction.commitNow()

@@ -1,5 +1,5 @@
 package ru.kolyukaev.yomate.views.adapter
 
 interface CitiesListener {
-    fun onItemClick(name: String)
+    fun onItemClick(country: String, id: Int, name: String)
 }

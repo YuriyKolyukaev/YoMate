@@ -1,10 +1,9 @@
 package ru.kolyukaev.yomate.data.models
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class City(
-    @SerializedName("coord")
-    val coord: Coord,
     @SerializedName("country")
     val country: String,
     @SerializedName("id")
@@ -13,11 +12,4 @@ data class City(
     val name: String,
     @SerializedName("state")
     val state: String
-) {
-    data class Coord(
-        @SerializedName("lat")
-        val lat: Double,
-        @SerializedName("lon")
-        val lon: Double
-    )
-}
+) : Serializable

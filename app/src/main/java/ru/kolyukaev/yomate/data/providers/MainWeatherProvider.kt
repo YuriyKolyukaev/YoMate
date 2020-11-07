@@ -14,9 +14,10 @@ import ru.kolyukaev.yomate.presenters.MainWeatherPresenter
 
 class MainWeatherProvider (var presenter: MainWeatherPresenter) {
 
-    fun loadWeather(nameCity: String) {
+    fun loadWeather(id: Int) {
+        log("$id")
         val weatherService: WeatherService = RestClient.getRetrofit()
-        val call: Call<MainResponse> = weatherService.getWeatherData(nameCity, ApiMethods.KEY, ApiMethods.UNITS)
+        val call: Call<MainResponse> = weatherService.getWeatherData(id, ApiMethods.KEY, ApiMethods.UNITS)
 
         call.enqueue(object : Callback<MainResponse> {
             override fun onFailure(call: Call<MainResponse>, t: Throwable) {
@@ -29,15 +30,15 @@ class MainWeatherProvider (var presenter: MainWeatherPresenter) {
                     val weatherResponse = response.body()!!
                     log("name = $weatherResponse)")
 
-
                     val weatherList: ArrayList<MainWeatherModel> = ArrayList()
 
                     val weather = MainWeatherModel(
                         temperature = weatherResponse.main!!.temp,
-                        cloudiness = weatherResponse.clouds!!.all)
+                        cloudiness = weatherResponse.clouds!!.all,
+                        wind = weatherResponse.wind!!.speed,
+                        icon = weatherResponse.weather!!.get(0).icon.toString()
+                    )
                     weatherList.add(weather)
-
-                    Log.e("TEST_TEST", "weather ${weatherResponse.base} ${weatherResponse.clouds} ${weatherResponse.cod} ${weatherResponse.main}")
 
 
                     presenter.weatherLoaded(weatherList)

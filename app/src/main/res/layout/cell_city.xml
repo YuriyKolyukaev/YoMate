@@ -5,11 +5,33 @@
     android:layout_gravity="center_vertical"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
-    android:orientation="vertical">
+    android:divider="@drawable/separator"
+    android:dividerPadding="5dp"
+    android:orientation="vertical"
+    android:showDividers="end">
 
     <TextView
         android:id="@+id/tv_city_cell"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/tv_country_cell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="15dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_state_cell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="5dp"
+        android:textSize="12sp" />
 </LinearLayout>

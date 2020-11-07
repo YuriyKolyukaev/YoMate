@@ -9,16 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import ru.kolyukaev.yomate.R
-import ru.kolyukaev.yomate.gone
-import ru.kolyukaev.yomate.log
+import ru.kolyukaev.yomate.*
 import ru.kolyukaev.yomate.views.fragments.CityFragment
 import ru.kolyukaev.yomate.views.fragments.MainFragment
-import ru.kolyukaev.yomate.visible
 
 class MainActivity : MvpAppCompatActivity() {
 
-    private var fragmentManager: FragmentManager? = null
+    private lateinit var fragmentManager: FragmentManager
     var onToolbarTextChanged: ((text: String) -> Unit)? = null
 
     @SuppressLint("WrongConstant")
@@ -34,28 +31,27 @@ class MainActivity : MvpAppCompatActivity() {
         val fragment1 = MainFragment()
 
         commitFragmentTransaction(fragment1, "YoMate")
-
         log("commitFragmentTransaction fragment1")
+
         setToolbarTextChangedListener()
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
         menuInflater.inflate(R.menu.city_info_menu, menu)
         return super.onCreateOptionsMenu(menu)
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_search) {
-            val fragment3 = CityFragment()
-            commitFragmentTransaction(fragment3, "Cities")
+            val cityFragment = CityFragment()
+            commitFragmentTransaction(cityFragment, "Cities")
             log("commitFragmentTransaction fragment3")
         }
         return true
     }
 
     fun commitFragmentTransaction(fragment: Fragment, title: String) {
-        fragmentManager!!.beginTransaction()
+        fragmentManager.beginTransaction()
             .replace(R.id.container, fragment)
             .commitNow()
         tv_toolbar.text = title
@@ -65,8 +61,33 @@ class MainActivity : MvpAppCompatActivity() {
         et_toolbar_search.gone()
     }
 
-    fun visibleToolbar(){
+    fun visibleToolbar() {
         et_toolbar_search.visible()
+    }
+
+    fun enlargeToolbar() {
+        tv_toolbar.textSize = 25F
+    }
+
+    fun decrease() {
+        tv_toolbar.textSize = 10F
+    }
+
+    fun visibleCityandCountry(country: String?, name: String?) {
+        tv_change_city.visible()
+        tv_change_city.text = name
+
+        tv_country.visible()
+        tv_country.text = "$country:"
+    }
+
+    fun goneCityandCountry() {
+        tv_change_city.gone()
+        tv_country.gone()
+    }
+
+    fun clearEditText() {
+        et_toolbar_search.setText("")
     }
 
     private fun setToolbarTextChangedListener() {

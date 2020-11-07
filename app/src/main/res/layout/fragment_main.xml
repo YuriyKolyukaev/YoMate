@@ -9,6 +9,8 @@
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="@drawable/wallpaper"
         android:scrollbars="none">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,24 +19,35 @@
 
             <ProgressBar
                 android:id="@+id/pb_loading"
-                android:progress="10"
                 android:layout_width="@dimen/progress_size"
                 android:layout_height="@dimen/progress_size"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
+                android:progress="10"
                 android:progressDrawable="@drawable/circle"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="gone"/>
+                app:layout_constraintTop_toTopOf="parent" />
+
 
             <TextView
                 android:id="@+id/tv_temperature"
                 android:layout_width="wrap_content"
-                android:layout_height="1200dp"
-                android:layout_marginStart="80dp"
-                android:layout_marginTop="25dp"
-                android:text="@string/temperature"
-                android:textSize="15sp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="85dp"
+                android:layout_marginTop="50dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="28sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_wind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="100dp"
+                android:textColor="@color/colorPrimaryDark"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,32 +55,70 @@
                 android:id="@+id/tv_cloudiness"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="250dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
-                android:text="@string/cloudiness"
-                android:textSize="15sp"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_wind" />
+
+            <ImageView
+                android:id="@+id/image_clear_sky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="256dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/weathericon"
+                android:src="@drawable/d_01"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/image_wind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="100dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@+id/tv_wind"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/wind" />
+
+            <ImageView
+                android:id="@+id/image_cloudy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@+id/tv_cloudiness"
+                app:layout_constraintTop_toBottomOf="@+id/image_wind"
+                app:srcCompat="@drawable/cloudy" />
 
             <Button
                 android:id="@+id/btn_update"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="250dp"
-                android:layout_marginTop="40dp"
-                android:text="@string/update"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="256dp"
+                android:layout_marginTop="116dp"
+                android:background="@drawable/update"
+                android:textColor="@color/ColorBackground"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/btn_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="250dp"
-                android:layout_marginTop="100dp"
-                android:text="@string/details"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="175dp"
+                android:layout_marginTop="276dp"
+                android:background="@drawable/details"
+                android:textColor="@color/ColorBackground"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

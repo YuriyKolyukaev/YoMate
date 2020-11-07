@@ -76,7 +76,7 @@ data class Main (
     var tempMax: Double = 0.0,
     @SerializedName("pressure")
     @Expose
-    var pressure: Int = 0,
+    var pressure: Double = 0.0,
     @SerializedName("humidity")
     @Expose
     var humidity: Int = 0
@@ -100,7 +100,7 @@ data class Sys (
     var sunset: Int = 0
 )
 
-class Weather (
+data class Weather (
     @SerializedName("id")
     @Expose
     var id: Int = 0,
