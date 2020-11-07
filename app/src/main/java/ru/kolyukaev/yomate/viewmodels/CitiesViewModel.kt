@@ -31,6 +31,7 @@ class CitiesViewModel : ViewModel() {
             } catch (e: Exception) {
 
             }
+
         }
     }
 
