@@ -23,6 +23,7 @@ class CitiesViewModel : ViewModel() {
         // корутины
         viewModelScope.launch(Dispatchers.Default) {
             log("fun viewModelScope.launch")
+            val citiesList = citiesMapToList(citiesMap)
 
             try {
                 val objectInputStream = ObjectInputStream(citiesInputStream)
