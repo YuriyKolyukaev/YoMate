@@ -22,7 +22,7 @@ class MainWeatherProvider (var presenter: MainWeatherPresenter) {
         call.enqueue(object : Callback<MainResponse> {
             override fun onFailure(call: Call<MainResponse>, t: Throwable) {
                 log("${t.message}")
-                presenter.onError(t)
+                presenter.onError("Network request error")
             }
 
             override fun onResponse(call: Call<MainResponse>, response: Response<MainResponse>) {
@@ -34,6 +34,8 @@ class MainWeatherProvider (var presenter: MainWeatherPresenter) {
 
                     val weather = MainWeatherModel(
                         temperature = weatherResponse.main!!.temp,
+                        pressure = weatherResponse.main!!.pressure,
+                        humidity = weatherResponse.main!!.humidity,
                         cloudiness = weatherResponse.clouds!!.all,
                         wind = weatherResponse.wind!!.speed,
                         icon = weatherResponse.weather!!.get(0).icon.toString()

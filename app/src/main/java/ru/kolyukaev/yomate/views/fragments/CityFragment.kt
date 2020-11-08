@@ -6,34 +6,32 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_city.*
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.City
 import ru.kolyukaev.yomate.gone
-import ru.kolyukaev.yomate.presenters.CitiesPresenter
 import ru.kolyukaev.yomate.viewmodels.CitiesViewModel
-import ru.kolyukaev.yomate.views.CitiesView
 import ru.kolyukaev.yomate.views.activities.MainActivity
 import ru.kolyukaev.yomate.views.adapter.CitiesListener
 import ru.kolyukaev.yomate.views.adapter.CityAdapter
 import ru.kolyukaev.yomate.views.adapter.RecyclerItemClickListener
 
 
-class CityFragment : BaseFragment(), CitiesView, CitiesListener {
+class CityFragment : BaseFragment(), CitiesListener {
 
     private lateinit var mAdapter: CityAdapter
 
-    @InjectPresenter
-    lateinit var citiesPresenter: CitiesPresenter
-
     lateinit var citiesViewModel: CitiesViewModel
+
+    override val toolbarName: String
+        get() = getString(R.string.cities_fragment_name)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_city, container, false)
     }
@@ -45,7 +43,7 @@ class CityFragment : BaseFragment(), CitiesView, CitiesListener {
         activity.visibleToolbar()
         activity.enlargeToolbar()
         activity.goneCityandCountry()
-        activity.clearEditText()
+
 
         mAdapter = CityAdapter(requireContext(), this)
         rv_city.adapter = mAdapter
@@ -67,7 +65,7 @@ class CityFragment : BaseFragment(), CitiesView, CitiesListener {
 
         citiesViewModel.citiesLiveData.observe(viewLifecycleOwner, Observer {
             setupCitiesList(it as ArrayList<City>)
-            pb_load.gone()
+            startLoading()
         })
 
         citiesViewModel.mainWeatherLiveData.observe(viewLifecycleOwner, Observer {
@@ -77,38 +75,43 @@ class CityFragment : BaseFragment(), CitiesView, CitiesListener {
 //        citiesViewModel.getWeathers()
     }
 
+
     private fun setEditTextChangeListener() {
         (activity as? MainActivity?)?.onToolbarTextChanged = { text ->
             mAdapter.filter(text)
         }
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         // Очищаем ссылку при уничтожении фрагмента чтобы избежать утечки
-        (activity as? MainActivity?)?.onToolbarTextChanged = null
-        (activity as? MainActivity?)?.goneToolbar()
-        (activity as? MainActivity?)?.decrease()
+        val activity = (activity as? MainActivity)
+        activity?.onToolbarTextChanged = null
+        activity?.goneToolbar()
+        activity?.decrease()
+        activity?.clearEditText()
 
-        super.onDestroy()
+        super.onDestroyView()
     }
 
-    override fun startLoading(number: Int) {
+
+    fun startLoading() {
+        pb_load.gone()
     }
 
-    override fun setupCitiesList(cities: ArrayList<City>) {
+    fun setupCitiesList(cities: ArrayList<City>) {
         mAdapter.setupCities(cities)
     }
 
-    override fun endLoading() {
+    fun endLoading() {
     }
 
-    override fun showError(text: String) {
+    fun showError(text: String) {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.city_info_menu, menu)
         menu.clear()
-}
+    }
 
     override fun onItemClick(country: String, id: Int, name: String) {
         val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()

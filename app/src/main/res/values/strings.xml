@@ -9,4 +9,9 @@
     <string name="city_no_items">city_no_items</string>
     <string name="wind_speed">Wind speed</string>
     <string name="weathericon">WeatherIcon</string>
+    <string name="apps_name">YoMate</string>
+    <string name="cities_fragment_name">Cities</string>
+    <string name="details_fragment_name">Details</string>
+    <string name="enter_city">enter your city</string>
+
 </resources>

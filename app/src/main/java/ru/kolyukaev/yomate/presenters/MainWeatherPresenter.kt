@@ -31,16 +31,18 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
         viewState.showError("Weather state is empty")
         } else {
             val temperature = "${weatherList[0].temperature} С°"
+            val pressure = "Давление ${weatherList[0].pressure} mm Hg"
+            val humidity = "Влажность ${weatherList[0].humidity} %"
             val cloudiness = "Облачность ${weatherList[0].cloudiness}%"
             val wind = "Скорость ветра ${weatherList[0].wind} m/s"
             val icon = getIconWeather(weatherList[0].icon)
-            viewState.weatherRequest(temperature, cloudiness, wind, icon)
+            viewState.getWeatherResponse(temperature, pressure, humidity, cloudiness, wind, icon)
             viewState.showComponents()
         }
     }
 
-    fun onError(t: Throwable) {
-        viewState.showError(t.message.toString())
+    fun onError(t: String) {
+        viewState.showError(t)
     }
 
     fun getIconWeather(icon: String): Int {
@@ -66,7 +68,7 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
             else -> R.drawable.cancel
         }
     }
+
     fun loadingWeatherDetails() {
     }
-
 }

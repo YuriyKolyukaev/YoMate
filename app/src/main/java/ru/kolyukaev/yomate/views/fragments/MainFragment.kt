@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.log
@@ -19,6 +18,9 @@ class MainFragment : BaseFragment(), MainWeatherView {
 
     @InjectPresenter
     lateinit var mainWeatherPresenter: MainWeatherPresenter
+
+    override val toolbarName: String
+        get() = getString(R.string.app_name)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,34 +35,35 @@ class MainFragment : BaseFragment(), MainWeatherView {
         super.onViewCreated(view, savedInstanceState)
 
         btn_update.setOnClickListener {
-            mainWeatherPresenter.loadingWeatherCity( true, null)
+            getBundle()
         }
 
         btn_details.setOnClickListener {
-            (activity as MainActivity).commitFragmentTransaction(CityFragment(), "City")
+            (activity as MainActivity).commitFragmentTransaction(DetailsFragment())
         }
 
+        getBundle()
+    }
+
+    fun getBundle() {
         val id = arguments?.getInt("id")
         val name = arguments?.getString("name")
         val country = arguments?.getString("country")
         log("TEST_ARGUMENTS ${arguments?.getInt("id")}")
 
-        id?.apply {getBundle(country, id, name) }
+        id?.apply {sendBundle(country, id, name) } ?: Toast.makeText(context, "Enter your city",
+            Toast.LENGTH_SHORT).show()
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as MainActivity).tv_toolbar.text = "YoMate"
-        (activity as MainActivity).tv_change_city.visible()
+    private fun sendBundle(country: String?, id: Int?, name: String?) {
+        log("getBundle $name")
+        if (country == null || name == null || id == 0) {
+            showError("Error request from the list of cities")
+        } else {
+            mainWeatherPresenter.loadingWeatherCity(true, id)
+            (activity as MainActivity).visibleCityandCountry(country, name)
+        }
     }
-
-    private fun getBundle(country: String?, id: Int?, name: String?) {
-        log("getBundle")
-        mainWeatherPresenter.loadingWeatherCity(true, id)
-        (activity as MainActivity).visibleCityandCountry(country,name)
-        Toast.makeText(context, "Passed: Updated", Toast.LENGTH_SHORT).show()
-    }
-
 
     override fun startLoading() {
         btn_update.visibility = View.GONE
@@ -75,21 +78,25 @@ class MainFragment : BaseFragment(), MainWeatherView {
     override fun showComponents() {
         image_clear_sky.visible()
         image_wind.visible()
-        image_cloudy.visible()
+        image_cloudiness.visible()
+        image_pressure.visible()
+        image_humidity.visible()
         btn_details.visible()
         btn_update.visible()
+        fl_transparent.visible()
+        Toast.makeText(context, "Passed: Updated", Toast.LENGTH_SHORT).show()
     }
 
     override fun showError(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
-
-    override fun weatherRequest(temperature: String, cloudiness: String, wind: String, icon: Int) {
+    override fun getWeatherResponse(temperature: String, pressure: String, humidity: String, cloudiness: String, wind: String, icon: Int) {
         tv_temperature.text = temperature
+        tv_pressure.text = pressure
+        tv_humidity.text = humidity
         tv_cloudiness.text = cloudiness
         tv_wind.text = wind
         image_clear_sky.setImageResource(icon)
-
     }
 }

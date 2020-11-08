@@ -45,7 +45,7 @@ class CityAdapter(
             val country = mCityList[currentPosition].country
             val id = mCityList[currentPosition].id
             val name = mCityList[currentPosition].name
-            log("idCity = $id")
+            log("idCity = $id, country = $country")
             listener.onItemClick(country, id, name)
         }
         return viewHolder

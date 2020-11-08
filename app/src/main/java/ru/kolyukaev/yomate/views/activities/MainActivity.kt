@@ -30,7 +30,7 @@ class MainActivity : MvpAppCompatActivity() {
 
         val fragment1 = MainFragment()
 
-        commitFragmentTransaction(fragment1, "YoMate")
+        commitFragmentTransaction(fragment1)
         log("commitFragmentTransaction fragment1")
 
         setToolbarTextChangedListener()
@@ -44,17 +44,20 @@ class MainActivity : MvpAppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_search) {
             val cityFragment = CityFragment()
-            commitFragmentTransaction(cityFragment, "Cities")
-            log("commitFragmentTransaction fragment3")
+            commitFragmentTransaction(cityFragment)
+            log("commitFragmentTransaction fragment2")
         }
         return true
     }
 
-    fun commitFragmentTransaction(fragment: Fragment, title: String) {
+    fun commitFragmentTransaction(fragment: Fragment) {
         fragmentManager.beginTransaction()
             .replace(R.id.container, fragment)
             .commitNow()
-        tv_toolbar.text = title
+    }
+
+    fun setToolbarName(name: String) {
+        tv_toolbar.text = name
     }
 
     fun goneToolbar() {
@@ -73,6 +76,7 @@ class MainActivity : MvpAppCompatActivity() {
         tv_toolbar.textSize = 10F
     }
 
+    @SuppressLint("SetTextI18n")
     fun visibleCityandCountry(country: String?, name: String?) {
         tv_change_city.visible()
         tv_change_city.text = name
@@ -90,6 +94,8 @@ class MainActivity : MvpAppCompatActivity() {
         et_toolbar_search.setText("")
     }
 
+
+
     private fun setToolbarTextChangedListener() {
         et_toolbar_search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -99,4 +105,5 @@ class MainActivity : MvpAppCompatActivity() {
             }
         })
     }
+
 }

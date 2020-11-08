@@ -1,4 +1,4 @@
 package ru.kolyukaev.yomate.views.fragments
 
-class SettingsFragment: BaseFragment() {
+class SettingsFragment(override val toolbarName: String) : BaseFragment() {
 }
