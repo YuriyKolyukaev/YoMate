@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.arellomobile.mvp.MvpAppCompatActivity
@@ -30,10 +31,24 @@ class MainActivity : MvpAppCompatActivity() {
 
         val fragment1 = MainFragment()
 
-        commitFragmentTransaction(fragment1)
+        commitFragmentTransaction(fragment1, false)
         log("commitFragmentTransaction fragment1")
 
         setToolbarTextChangedListener()
+    }
+
+
+    override fun onBackPressed() {
+
+        var count = fragmentManager.backStackEntryCount
+
+        if (count > 0) {
+            fragmentManager.popBackStack()
+        } else {
+            Toast.makeText(this, "Exit",
+                Toast.LENGTH_SHORT).show()
+            super.onBackPressed()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
@@ -41,19 +56,24 @@ class MainActivity : MvpAppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_search) {
             val cityFragment = CityFragment()
-            commitFragmentTransaction(cityFragment)
+            commitFragmentTransaction(cityFragment, true)
             log("commitFragmentTransaction fragment2")
         }
         return true
     }
 
-    fun commitFragmentTransaction(fragment: Fragment) {
-        fragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
-            .commitNow()
+
+    fun commitFragmentTransaction(fragment: Fragment, isAddToBackStack: Boolean) {
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.container, fragment)
+        if (isAddToBackStack) {
+            transaction.addToBackStack(null)
+        }
+        transaction.commit()
     }
 
     fun setToolbarName(name: String) {
@@ -93,8 +113,6 @@ class MainActivity : MvpAppCompatActivity() {
     fun clearEditText() {
         et_toolbar_search.setText("")
     }
-
-
 
     private fun setToolbarTextChangedListener() {
         et_toolbar_search.addTextChangedListener(object : TextWatcher {

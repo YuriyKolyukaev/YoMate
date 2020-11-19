@@ -76,6 +76,8 @@ class CityFragment : BaseFragment(), CitiesListener {
     }
 
 
+
+
     private fun setEditTextChangeListener() {
         (activity as? MainActivity?)?.onToolbarTextChanged = { text ->
             mAdapter.filter(text)
@@ -122,6 +124,6 @@ class CityFragment : BaseFragment(), CitiesListener {
         bundle.putString("country", country)
         mainFragment.arguments = bundle
         transaction.replace(R.id.container, mainFragment)
-        transaction.commitNow()
+        transaction.commit()
     }
 }

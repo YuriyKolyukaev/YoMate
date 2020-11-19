@@ -39,7 +39,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
         }
 
         btn_details.setOnClickListener {
-            (activity as MainActivity).commitFragmentTransaction(DetailsFragment())
+            (activity as MainActivity).commitFragmentTransaction(DetailsFragment(),true)
         }
 
         getBundle()
