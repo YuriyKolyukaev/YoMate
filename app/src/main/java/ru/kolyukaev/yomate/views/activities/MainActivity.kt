@@ -11,6 +11,9 @@ import androidx.fragment.app.FragmentManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.kolyukaev.yomate.*
+import ru.kolyukaev.yomate.utils.gone
+import ru.kolyukaev.yomate.utils.log
+import ru.kolyukaev.yomate.utils.visible
 import ru.kolyukaev.yomate.views.fragments.CityFragment
 import ru.kolyukaev.yomate.views.fragments.MainFragment
 

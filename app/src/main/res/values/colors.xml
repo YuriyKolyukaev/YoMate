@@ -4,10 +4,7 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorProgressBar">#9BEDF8</color>
-    <color name="Color_background">#AFF8FF</color>
     <color name="ColorBackground">#ECFDFF</color>
-    <color name="color_background">#D1B8FF</color>
-    <color name="color_background2">#CDC2E2</color>
     <color name="color_black">#000000</color>
     <color name="color_white">#FFFFFF</color>
 

@@ -6,7 +6,7 @@ import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.MainWeatherModel
 import ru.kolyukaev.yomate.data.network.api.ApiMethods
 import ru.kolyukaev.yomate.data.providers.MainWeatherProvider
-import ru.kolyukaev.yomate.log
+import ru.kolyukaev.yomate.utils.log
 import ru.kolyukaev.yomate.views.MainWeatherView
 
 @InjectViewState

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.cell_city.view.*
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.City
-import ru.kolyukaev.yomate.log
+import ru.kolyukaev.yomate.utils.log
 
 class CityAdapter(
     private val context: Context,
@@ -45,7 +45,7 @@ class CityAdapter(
             val country = mCityList[currentPosition].country
             val id = mCityList[currentPosition].id
             val name = mCityList[currentPosition].name
-            log("idCity = $id, country = $country")
+            log("idCity = $id, country = $country  coord = ${mCityList[currentPosition].coord}")
             listener.onItemClick(country, id, name)
         }
         return viewHolder

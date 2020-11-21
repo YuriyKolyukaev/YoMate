@@ -1,7 +1,6 @@
 package ru.kolyukaev.yomate.views.fragments
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +8,11 @@ import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_main.*
 import ru.kolyukaev.yomate.R
-import ru.kolyukaev.yomate.log
+import ru.kolyukaev.yomate.utils.log
 import ru.kolyukaev.yomate.presenters.MainWeatherPresenter
 import ru.kolyukaev.yomate.views.MainWeatherView
 import ru.kolyukaev.yomate.views.activities.MainActivity
-import ru.kolyukaev.yomate.visible
+import ru.kolyukaev.yomate.utils.visible
 
 class MainFragment : BaseFragment(), MainWeatherView {
 

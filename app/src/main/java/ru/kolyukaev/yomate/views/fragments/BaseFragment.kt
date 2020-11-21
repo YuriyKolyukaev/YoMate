@@ -3,7 +3,7 @@ package ru.kolyukaev.yomate.views.fragments
 import android.os.Bundle
 import android.view.View
 import com.arellomobile.mvp.MvpAppCompatFragment
-import ru.kolyukaev.yomate.log
+import ru.kolyukaev.yomate.utils.log
 import ru.kolyukaev.yomate.views.activities.MainActivity
 
 abstract class BaseFragment: MvpAppCompatFragment() {

@@ -11,5 +11,8 @@ data class City(
     @SerializedName("name")
     val name: String,
     @SerializedName("state")
-    val state: String
+    val state: String,
+    @SerializedName("coord")
+    val coord: Coord
 ) : Serializable
+

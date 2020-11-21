@@ -3,7 +3,7 @@ package ru.kolyukaev.yomate.data.providers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.kolyukaev.yomate.log
+import ru.kolyukaev.yomate.utils.log
 import ru.kolyukaev.yomate.data.models.MainWeatherModel
 import ru.kolyukaev.yomate.data.network.RestClient
 import ru.kolyukaev.yomate.data.network.api.ApiMethods

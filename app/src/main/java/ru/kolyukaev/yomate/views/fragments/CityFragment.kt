@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_city.*
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.City
-import ru.kolyukaev.yomate.gone
+import ru.kolyukaev.yomate.utils.gone
 import ru.kolyukaev.yomate.viewmodels.CitiesViewModel
 import ru.kolyukaev.yomate.views.activities.MainActivity
 import ru.kolyukaev.yomate.views.adapter.CitiesListener
@@ -39,6 +39,8 @@ class CityFragment : BaseFragment(), CitiesListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        citiesViewModel = ViewModelProvider(this).get(CitiesViewModel::class.java)
+
         val activity = (activity as MainActivity)
         activity.visibleToolbar()
         activity.enlargeToolbar()
@@ -59,9 +61,7 @@ class CityFragment : BaseFragment(), CitiesListener {
 
         setEditTextChangeListener()
 
-        val inputStream = resources.openRawResource(R.raw.test_filemost)
-
-        citiesViewModel = ViewModelProvider(this).get(CitiesViewModel::class.java)
+        val inputStream = resources.openRawResource(R.raw.cities_list_full)
 
         citiesViewModel.citiesLiveData.observe(viewLifecycleOwner, Observer {
             setupCitiesList(it as ArrayList<City>)
@@ -72,6 +72,12 @@ class CityFragment : BaseFragment(), CitiesListener {
         })
 
         citiesViewModel.getCities(inputStream)
+
+
+//        Функция во вьюмоделе, которая конвертирует json в файл с объектом List<City>
+//        val inputStream = resources.openRawResource(R.raw.cities)
+//        citiesViewModel.convert(inputStream, requireContext().filesDir.absolutePath)
+
     }
 
 
