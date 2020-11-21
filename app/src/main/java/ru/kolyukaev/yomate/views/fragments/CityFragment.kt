@@ -72,10 +72,7 @@ class CityFragment : BaseFragment(), CitiesListener {
         })
 
         citiesViewModel.getCities(inputStream)
-//        citiesViewModel.getWeathers()
     }
-
-
 
 
     private fun setEditTextChangeListener() {
@@ -85,13 +82,12 @@ class CityFragment : BaseFragment(), CitiesListener {
     }
 
     override fun onDestroyView() {
-        // Очищаем ссылку при уничтожении фрагмента чтобы избежать утечки
+        // Очищаем ссылку при уничтожении фрагмента, чтобы избежать утечки
         val activity = (activity as? MainActivity)
         activity?.onToolbarTextChanged = null
         activity?.goneToolbar()
         activity?.decrease()
         activity?.clearEditText()
-
         super.onDestroyView()
     }
 

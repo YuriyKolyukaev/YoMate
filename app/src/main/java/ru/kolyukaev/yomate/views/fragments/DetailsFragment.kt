@@ -27,4 +27,9 @@ class DetailsFragment: BaseFragment() {
         activity.goneCityandCountry()
     }
 
+    override fun onDestroyView() {
+        (activity as MainActivity).decrease()
+        super.onDestroyView()
+    }
+
 }

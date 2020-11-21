@@ -6,6 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
     <ScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
@@ -32,10 +37,10 @@
 
             <FrameLayout
                 android:id="@+id/fl_transparent"
-                android:layout_width="207dp"
+                android:layout_width="245dp"
                 android:layout_height="186dp"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="148dp"
                 android:visibility="gone"
                 android:alpha="0.15"
                 android:background="@color/color_black"
@@ -47,8 +52,8 @@
                 android:id="@+id/tv_temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="85dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginStart="175dp"
+                android:layout_marginTop="150dp"
                 android:textColor="@color/color_white"
                 android:textSize="28sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="200dp"
                 android:textColor="@color/color_white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -99,8 +104,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="100dp"
                 android:visibility="gone"
+                android:layout_marginTop="200dp"
                 app:layout_constraintStart_toEndOf="@+id/tv_wind"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/wind" />
@@ -142,35 +147,23 @@
                 android:id="@+id/image_clear_sky"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="256dp"
-                android:layout_marginTop="16dp"
-                android:contentDescription="@string/weathericon"
+                android:layout_marginStart="150dp"
+                android:layout_marginTop="5dp"
                 android:visibility="gone"
+                android:contentDescription="@string/weathericon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:src="@drawable/d_01" />
 
-
-
-            <Button
-                android:id="@+id/btn_update"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_marginStart="270dp"
-                android:layout_marginTop="116dp"
-                android:background="@drawable/update"
-                android:textColor="@color/ColorBackground"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/btn_details"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:layout_marginStart="175dp"
-                android:layout_marginTop="276dp"
+                android:layout_marginTop="400dp"
                 android:background="@drawable/details"
+                android:visibility="gone"
                 android:textColor="@color/ColorBackground"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -179,5 +172,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

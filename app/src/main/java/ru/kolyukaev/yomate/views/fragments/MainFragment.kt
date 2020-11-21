@@ -1,6 +1,7 @@
 package ru.kolyukaev.yomate.views.fragments
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,9 +35,15 @@ class MainFragment : BaseFragment(), MainWeatherView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        btn_update.setOnClickListener {
-            getBundle()
+
+        swipe_refresh_layout.setOnRefreshListener {
+                getBundle()
+                swipe_refresh_layout.isRefreshing = false
         }
+        swipe_refresh_layout.setColorSchemeColors(
+            resources.getColor(R.color.colorProgressBar)
+
+        )
 
         btn_details.setOnClickListener {
             (activity as MainActivity).commitFragmentTransaction(DetailsFragment(),true)
@@ -66,12 +73,10 @@ class MainFragment : BaseFragment(), MainWeatherView {
     }
 
     override fun startLoading() {
-        btn_update.visibility = View.GONE
         pb_loading.visibility = View.VISIBLE
     }
 
     override fun endLoading() {
-        btn_update.visibility = View.VISIBLE
         pb_loading.visibility = View.GONE
     }
 
@@ -80,9 +85,9 @@ class MainFragment : BaseFragment(), MainWeatherView {
         image_wind.visible()
         image_cloudiness.visible()
         image_pressure.visible()
+        btn_details.visible()
         image_humidity.visible()
         btn_details.visible()
-        btn_update.visible()
         fl_transparent.visible()
         Toast.makeText(context, "Passed: Updated", Toast.LENGTH_SHORT).show()
     }
@@ -99,4 +104,5 @@ class MainFragment : BaseFragment(), MainWeatherView {
         tv_wind.text = wind
         image_clear_sky.setImageResource(icon)
     }
+
 }

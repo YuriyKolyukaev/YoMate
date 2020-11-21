@@ -10,7 +10,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/toolbar"
-        android:background="@drawable/toolbarimage"
+        android:background="@color/color_black"
         app:title="YoMate">
 
         <androidx.constraintlayout.widget.ConstraintLayout
