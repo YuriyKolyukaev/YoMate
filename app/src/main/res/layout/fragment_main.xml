@@ -1,176 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@drawable/background_fragment_main"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:background="@drawable/wallpaper"
-        android:scrollbars="none">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
+            android:id="@+id/sv_background"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="none">
 
-            <ProgressBar
-                android:id="@+id/pb_loading"
-                android:layout_width="@dimen/progress_size"
-                android:layout_height="@dimen/progress_size"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:progress="10"
-                android:progressDrawable="@drawable/circle"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <FrameLayout
-                android:id="@+id/fl_transparent"
-                android:layout_width="245dp"
-                android:layout_height="186dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="148dp"
-                android:visibility="gone"
-                android:alpha="0.15"
-                android:background="@color/color_black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-            </FrameLayout>
+                <ProgressBar
+                    android:id="@+id/pb_loading"
+                    android:layout_width="@dimen/progress_size"
+                    android:layout_height="@dimen/progress_size"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:progress="10"
+                    android:progressDrawable="@drawable/circle"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_temperature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="175dp"
-                android:layout_marginTop="150dp"
-                android:textColor="@color/color_white"
-                android:textSize="28sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <FrameLayout
+                    android:id="@+id/fl_transparent"
+                    android:layout_width="255dp"
+                    android:layout_height="186dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="198dp"
+                    android:background="@color/color_crystal"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_wind"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="200dp"
-                android:textColor="@color/color_white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/tv_temperature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="175dp"
+                    android:layout_marginTop="200dp"
+                    android:textColor="@color/color_white"
+                    android:textSize="28sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_cloudiness"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/color_white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_wind" />
+                <TextView
+                    android:id="@+id/tv_wind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="250dp"
+                    android:textColor="@color/color_white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_pressure"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/color_white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_cloudiness"/>
+                <TextView
+                    android:id="@+id/tv_cloudiness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/color_white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_wind" />
 
-            <TextView
-                android:id="@+id/tv_humidity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/color_white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_pressure"/>
+                <TextView
+                    android:id="@+id/tv_pressure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/color_white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_cloudiness" />
 
-            <ImageView
-                android:id="@+id/image_wind"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:visibility="gone"
-                android:layout_marginTop="200dp"
-                app:layout_constraintStart_toEndOf="@+id/tv_wind"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/wind" />
+                <TextView
+                    android:id="@+id/tv_humidity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/color_white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_pressure" />
 
-            <ImageView
-                android:id="@+id/image_cloudiness"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="16dp"
-                android:visibility="gone"
-                app:layout_constraintStart_toEndOf="@+id/tv_cloudiness"
-                app:layout_constraintTop_toBottomOf="@+id/image_wind"
-                app:srcCompat="@drawable/cloudy" />
+                <ImageView
+                    android:id="@+id/image_wind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="250dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/tv_wind"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/wind" />
 
-            <ImageView
-                android:id="@+id/image_pressure"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="14dp"
-                android:visibility="gone"
-                app:layout_constraintStart_toEndOf="@+id/tv_pressure"
-                app:layout_constraintTop_toBottomOf="@+id/image_cloudiness"
-                app:srcCompat="@drawable/pressure" />
+                <ImageView
+                    android:id="@+id/image_cloudiness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/tv_cloudiness"
+                    app:layout_constraintTop_toBottomOf="@+id/image_wind"
+                    app:srcCompat="@drawable/cloudy" />
 
-            <ImageView
-                android:id="@+id/image_humidity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="12dp"
-                android:visibility="gone"
-                app:layout_constraintStart_toEndOf="@+id/tv_humidity"
-                app:layout_constraintTop_toBottomOf="@+id/image_pressure"
-                app:srcCompat="@drawable/humidity" />
+                <ImageView
+                    android:id="@+id/image_pressure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="14dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/tv_pressure"
+                    app:layout_constraintTop_toBottomOf="@+id/image_cloudiness"
+                    app:srcCompat="@drawable/pressure" />
 
-            <ImageView
-                android:id="@+id/image_clear_sky"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="150dp"
-                android:layout_marginTop="5dp"
-                android:visibility="gone"
-                android:contentDescription="@string/weathericon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/d_01" />
+                <ImageView
+                    android:id="@+id/image_humidity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="12dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/tv_humidity"
+                    app:layout_constraintTop_toBottomOf="@+id/image_pressure"
+                    app:srcCompat="@drawable/humidity" />
 
+                <ImageView
+                    android:id="@+id/image_clear_sky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="150dp"
+                    android:layout_marginTop="55dp"
+                    android:contentDescription="@string/weathericon"
+                    android:src="@drawable/d_01"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/btn_details"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_marginStart="175dp"
-                android:layout_marginTop="400dp"
-                android:background="@drawable/details"
-                android:visibility="gone"
-                android:textColor="@color/ColorBackground"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <Button
+                    android:id="@+id/btn_details"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_marginStart="175dp"
+                    android:layout_marginTop="650dp"
+                    android:background="@drawable/details"
+                    android:textColor="@color/ColorBackground"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_main_fragment"
+        style="@style/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@color/color_crystal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_change_country"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/country_fragment_name"
+                android:textSize="25sp"
+                android:textColor="@color/color_white"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_change_city"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@string/city_fragment_name"
+                android:textColor="@color/color_white"
+                android:textSize="25sp"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+</FrameLayout>

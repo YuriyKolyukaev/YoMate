@@ -22,16 +22,16 @@ class CityAdapter(
     fun setupCities(cityList: ArrayList<City>) {
         mSourceList.clear()
         mSourceList.addAll(cityList)
-
-        filter(query = "")
     }
 
     fun filter(query: String) {
         mCityList.clear()
         mSourceList.forEach {
+            if (query.length > 2) {
             if (it.name.contains(query, ignoreCase = true)) {
                 mCityList.add(it)
             }
+        }
         }
         notifyDataSetChanged()
     }
@@ -45,8 +45,10 @@ class CityAdapter(
             val country = mCityList[currentPosition].country
             val id = mCityList[currentPosition].id
             val name = mCityList[currentPosition].name
+            val lat = mCityList[currentPosition].coord.lat
+            val lon = mCityList[currentPosition].coord.lon
             log("idCity = $id, country = $country  coord = ${mCityList[currentPosition].coord}")
-            listener.onItemClick(country, id, name)
+            listener.onItemClick(country, id, name, lat, lon)
         }
         return viewHolder
     }
@@ -54,6 +56,7 @@ class CityAdapter(
     override fun getItemCount(): Int {
         return mCityList.size
     }
+
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is CityViewHolder) {

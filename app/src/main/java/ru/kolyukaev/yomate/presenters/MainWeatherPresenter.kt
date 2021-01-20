@@ -12,7 +12,7 @@ import ru.kolyukaev.yomate.views.MainWeatherView
 @InjectViewState
 class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
 
-    fun loadingWeatherCity(isSuccess: Boolean, id: Int?) {
+    fun loadingWeatherOfCity(isSuccess: Boolean, id: Int?) {
         log("loadingWeatherCity")
         val id1: Int = id ?: ApiMethods.ID
         viewState.startLoading()
@@ -22,6 +22,13 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
             } else {
                 viewState.showError("Weather state is incorrect")
             }
+    }
+
+    fun loadingDataOfCity (lat: Double?, lon: Double?) {
+        log("loadingDataOfCity")
+        val lat1 = lat ?: ApiMethods.lat
+        val lon1 = lon ?: ApiMethods.lon
+        MainWeatherProvider(presenter = this).loadData(lat1, lon1)
     }
 
     fun weatherLoaded(weatherList: ArrayList<MainWeatherModel>) {
@@ -39,6 +46,10 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
             viewState.getWeatherResponse(temperature, pressure, humidity, cloudiness, wind, icon)
             viewState.showComponents()
         }
+    }
+
+    fun photoLoaded(photoString: String) {
+        viewState.replaceBackground(photoString)
     }
 
     fun onError(t: String) {
@@ -71,4 +82,6 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
 
     fun loadingWeatherDetails() {
     }
+
+
 }

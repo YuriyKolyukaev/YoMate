@@ -7,8 +7,8 @@ import ru.kolyukaev.yomate.data.network.response.MainResponse
 
 interface WeatherService {
     @GET("/data/2.5/weather")
-    fun getWeatherData(@Query("id") id: Int, @Query("appid") app_id: String, @Query("units") units: String): Call<MainResponse>
+    fun getWeatherData(@Query("id") id: Int,
+                       @Query("appid") app_id: String,
+                       @Query("units") units: String): Call<MainResponse>
 
-    @GET("/data/2.5/weather")
-    suspend fun getWeatherDataSuspend(@Query("id") id: Int, @Query("appid") app_id: String, @Query("units") units: String): MainResponse
 }

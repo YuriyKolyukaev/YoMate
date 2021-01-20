@@ -23,12 +23,10 @@ class DetailsFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val activity = (activity as MainActivity)
-        activity.enlargeToolbar()
-        activity.goneCityandCountry()
+
     }
 
     override fun onDestroyView() {
-        (activity as MainActivity).decrease()
         super.onDestroyView()
     }
 

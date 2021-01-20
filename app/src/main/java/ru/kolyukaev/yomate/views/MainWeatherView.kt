@@ -11,6 +11,7 @@ interface MainWeatherView: MvpView {
     fun endLoading()
     fun showComponents()
     fun showError(text: String)
+    fun replaceBackground(photoString: String)
     fun getWeatherResponse(temperature: String, pressure: String, humidity: String, cloudiness: String, wind: String, icon: Int)
 
 }

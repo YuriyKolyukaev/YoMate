@@ -15,11 +15,4 @@ abstract class BaseFragment: MvpAppCompatFragment() {
         log("${this.javaClass.name} comes on the screen.")
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (activity is MainActivity) {
-            (activity as MainActivity).setToolbarName(toolbarName)
-        }
-    }
-
 }

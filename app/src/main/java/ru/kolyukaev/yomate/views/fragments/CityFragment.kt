@@ -1,6 +1,8 @@
 package ru.kolyukaev.yomate.views.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -11,11 +13,9 @@ import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.City
 import ru.kolyukaev.yomate.utils.gone
 import ru.kolyukaev.yomate.viewmodels.CitiesViewModel
-import ru.kolyukaev.yomate.views.activities.MainActivity
 import ru.kolyukaev.yomate.views.adapter.CitiesListener
 import ru.kolyukaev.yomate.views.adapter.CityAdapter
 import ru.kolyukaev.yomate.views.adapter.RecyclerItemClickListener
-
 
 class CityFragment : BaseFragment(), CitiesListener {
 
@@ -41,12 +41,6 @@ class CityFragment : BaseFragment(), CitiesListener {
 
         citiesViewModel = ViewModelProvider(this).get(CitiesViewModel::class.java)
 
-        val activity = (activity as MainActivity)
-        activity.visibleToolbar()
-        activity.enlargeToolbar()
-        activity.goneCityandCountry()
-
-
         mAdapter = CityAdapter(requireContext(), this)
         rv_city.adapter = mAdapter
         rv_city.layoutManager = LinearLayoutManager(context)
@@ -58,8 +52,6 @@ class CityFragment : BaseFragment(), CitiesListener {
                 }
             })
         )
-
-        setEditTextChangeListener()
 
         val inputStream = resources.openRawResource(R.raw.cities_list_full)
 
@@ -73,30 +65,16 @@ class CityFragment : BaseFragment(), CitiesListener {
 
         citiesViewModel.getCities(inputStream)
 
+        setToolbarTextChangedListener()
 
 //        Функция во вьюмоделе, которая конвертирует json в файл с объектом List<City>
 //        val inputStream = resources.openRawResource(R.raw.cities)
 //        citiesViewModel.convert(inputStream, requireContext().filesDir.absolutePath)
-
-    }
-
-
-    private fun setEditTextChangeListener() {
-        (activity as? MainActivity?)?.onToolbarTextChanged = { text ->
-            mAdapter.filter(text)
-        }
     }
 
     override fun onDestroyView() {
-        // Очищаем ссылку при уничтожении фрагмента, чтобы избежать утечки
-        val activity = (activity as? MainActivity)
-        activity?.onToolbarTextChanged = null
-        activity?.goneToolbar()
-        activity?.decrease()
-        activity?.clearEditText()
         super.onDestroyView()
     }
-
 
     fun startLoading() {
         pb_load.gone()
@@ -117,15 +95,36 @@ class CityFragment : BaseFragment(), CitiesListener {
         menu.clear()
     }
 
-    override fun onItemClick(country: String, id: Int, name: String) {
+    override fun onItemClick(country: String, id: Int, name: String, lat: Double, lon: Double) {
         val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
         val mainFragment = MainFragment()
         val bundle = Bundle()
         bundle.putInt("id", id)
         bundle.putString("name", name)
         bundle.putString("country", country)
+        bundle.putDouble("lat", lat)
+        bundle.putDouble("lon", lon)
         mainFragment.arguments = bundle
         transaction.replace(R.id.container, mainFragment)
         transaction.commit()
     }
+
+    private fun setToolbarTextChangedListener() {
+        et_change_city.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                mAdapter.filter(s.toString())
+            }
+        })
+    }
+
+//    (при использовании тулбара в активити) лямда с помощью который передаем текст из
+//    edit text activity в адаптер
+//    private fun setEditTextChangeListener() {
+//        (activity as? MainActivity?)?.onToolbarTextChanged = { text ->
+//            mAdapter.filter(text)
+//        }
+//    }
+
 }
