@@ -46,7 +46,8 @@
                     android:layout_height="186dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="198dp"
-                    android:background="@color/color_crystal"
+                    android:background="@android:drawable/editbox_background"
+                    android:backgroundTint="@color/color_crystal"
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -58,7 +59,7 @@
                     android:layout_marginStart="175dp"
                     android:layout_marginTop="200dp"
                     android:textColor="@color/color_white"
-                    android:textSize="28sp"
+                    android:textSize="34sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -163,7 +164,7 @@
                     android:layout_width="75dp"
                     android:layout_height="75dp"
                     android:layout_marginStart="175dp"
-                    android:layout_marginTop="650dp"
+                    android:layout_marginTop="850dp"
                     android:background="@drawable/details"
                     android:textColor="@color/ColorBackground"
                     android:textSize="18sp"
@@ -181,8 +182,9 @@
         style="@style/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@color/color_crystal">
+        android:layout_margin="8dp"
+        android:background="@android:drawable/editbox_background"
+        android:backgroundTint="@color/color_crystal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -196,9 +198,9 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="@string/country_fragment_name"
-                android:textSize="25sp"
                 android:textColor="@color/color_white"
-                android:visibility="gone"/>
+                android:textSize="25sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_change_city"
@@ -211,7 +213,7 @@
                 android:text="@string/city_fragment_name"
                 android:textColor="@color/color_white"
                 android:textSize="25sp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 

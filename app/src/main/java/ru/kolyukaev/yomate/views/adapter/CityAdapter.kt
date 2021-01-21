@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.cell_city.view.*
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.City
 import ru.kolyukaev.yomate.utils.log
+import ru.kolyukaev.yomate.views.fragments.MainFragment
 
 class CityAdapter(
     private val context: Context,

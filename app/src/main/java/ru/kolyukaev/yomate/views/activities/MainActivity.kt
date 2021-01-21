@@ -1,11 +1,7 @@
 package ru.kolyukaev.yomate.views.activities
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -31,44 +27,33 @@ class MainActivity : MvpAppCompatActivity() {
 
         val mainFragment = MainFragment()
 
-        commitFragmentTransaction(mainFragment, false)
+        commitFragmentTransaction(mainFragment)
         log("commitFragmentTransaction fragment1")
         window.statusBarColor = ContextCompat.getColor(this, R.color.color_black)
-
-//        setToolbarTextChangedListener()
     }
 
     override fun onBackPressed() {
+        val currentFragment = fragmentManager.findFragmentById(R.id.container)
 
-        val count = fragmentManager.backStackEntryCount
-
-        if (count > 0) {
-            fragmentManager.popBackStack()
+        if (currentFragment is MainFragment) {
+            finish()
         } else {
-            Toast.makeText(
-                this, "Exit",
-                Toast.LENGTH_SHORT
-            ).show()
             super.onBackPressed()
         }
     }
 
-
-    fun commitFragmentTransaction(fragment: Fragment, isAddToBackStack: Boolean) {
+    fun commitFragmentTransaction(fragment: Fragment) {
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment)
-        if (isAddToBackStack) {
-            transaction.addToBackStack(null)
-        }
+        transaction.addToBackStack(null)
         transaction.commit()
     }
 
-
     // скрывать клавиатуру
-    fun View.hideKeyboard() {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(windowToken, 0)
-    }
+//    fun View.hideKeyboard() {
+//        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//        imm.hideSoftInputFromWindow(windowToken, 0)
+//    }
 
 //    слушатель
 //    private fun setToolbarTextChangedListener() {

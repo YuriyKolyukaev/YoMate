@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_city.*
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.City
 import ru.kolyukaev.yomate.utils.gone
+import ru.kolyukaev.yomate.utils.visible
 import ru.kolyukaev.yomate.viewmodels.CitiesViewModel
 import ru.kolyukaev.yomate.views.adapter.CitiesListener
 import ru.kolyukaev.yomate.views.adapter.CityAdapter
@@ -25,6 +26,7 @@ class CityFragment : BaseFragment(), CitiesListener {
 
     override val toolbarName: String
         get() = getString(R.string.cities_fragment_name)
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +42,7 @@ class CityFragment : BaseFragment(), CitiesListener {
         super.onViewCreated(view, savedInstanceState)
 
         citiesViewModel = ViewModelProvider(this).get(CitiesViewModel::class.java)
+
 
         mAdapter = CityAdapter(requireContext(), this)
         rv_city.adapter = mAdapter
@@ -76,8 +79,15 @@ class CityFragment : BaseFragment(), CitiesListener {
         super.onDestroyView()
     }
 
+    override fun onPause() {
+        et_change_city.text = null
+        super.onPause()
+    }
+
     fun startLoading() {
         pb_load.gone()
+        tv_cities_loading.gone()
+        et_change_city.visible()
     }
 
     fun setupCitiesList(cities: ArrayList<City>) {

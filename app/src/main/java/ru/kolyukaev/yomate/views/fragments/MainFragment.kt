@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import ru.kolyukaev.yomate.R
@@ -47,7 +48,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
         )
 
         btn_details.setOnClickListener {
-            (activity as MainActivity).commitFragmentTransaction(DetailsFragment(),true)
+            (activity as MainActivity).commitFragmentTransaction(DetailsFragment())
         }
 
         getBundle()
@@ -57,8 +58,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
         toolbar_main_fragment.setOnMenuItemClickListener { item ->
             Log.i("QWE", "ITEMTEST  ${item.menuInfo} ${item}")
             if (item?.itemId == R.id.action_search) {
-                val cityFragment = CityFragment()
-                (activity as MainActivity).commitFragmentTransaction(cityFragment, true)
+                (activity as MainActivity).commitFragmentTransaction(CityFragment())
                 log("commitFragmentTransaction fragment2")
             }
             return@setOnMenuItemClickListener true
@@ -124,6 +124,8 @@ class MainFragment : BaseFragment(), MainWeatherView {
         Glide.with(this)
             .load(photoString)
             .placeholder(iv_background.drawable)
+            // плавная смена картинки
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(iv_background)
     }
 

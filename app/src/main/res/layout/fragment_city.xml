@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/color_background"
     android:orientation="vertical"
-
     tools:context=".views.activities.MainActivity">
 
     <FrameLayout
@@ -57,8 +56,9 @@
         style="@style/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@color/color_crystal">
+        android:layout_margin="8dp"
+        android:background="@android:drawable/editbox_background"
+        android:backgroundTint="@color/color_crystal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,8 +72,18 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="@string/cities_fragment_name"
-                android:textSize="25sp"
-                android:textColor="@color/color_white" />
+                android:textColor="@color/color_white"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/tv_cities_loading"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4.5"
+                android:gravity="center_vertical"
+                android:text="@string/loading"
+                android:textColor="@color/color_white"
+                android:textSize="25sp" />
 
             <EditText
                 android:id="@+id/et_change_city"
@@ -82,10 +92,11 @@
                 android:layout_weight="4"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:maxLines="1"
                 android:hint="@string/enter_city"
+                android:maxLines="1"
                 android:textColor="@color/color_light_gray"
-                android:textSize="15sp"/>
+                android:textSize="20sp"
+                android:visibility="gone" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 </FrameLayout>

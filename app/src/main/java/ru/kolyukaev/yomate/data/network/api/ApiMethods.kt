@@ -17,5 +17,4 @@ class ApiMethods {
 //        const val name: String = "point of interest"
         const val radius: Int = 3000
     }
-
 }
