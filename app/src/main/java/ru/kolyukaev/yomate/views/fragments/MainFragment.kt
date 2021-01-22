@@ -6,22 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import ru.kolyukaev.yomate.R
+import ru.kolyukaev.yomate.data.models.RvWeatherModel
 import ru.kolyukaev.yomate.utils.log
 import ru.kolyukaev.yomate.presenters.MainWeatherPresenter
 import ru.kolyukaev.yomate.views.MainWeatherView
 import ru.kolyukaev.yomate.views.activities.MainActivity
 import ru.kolyukaev.yomate.utils.visible
+import ru.kolyukaev.yomate.views.adapter.WeatherAdapter
 
 class MainFragment : BaseFragment(), MainWeatherView {
 
     @InjectPresenter
     lateinit var mainWeatherPresenter: MainWeatherPresenter
+
+    val weatherAdapter = WeatherAdapter(ArrayList())
 
     override val toolbarName: String
         get() = getString(R.string.app_name)
@@ -37,6 +42,16 @@ class MainFragment : BaseFragment(), MainWeatherView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        rv_hours_weather.adapter = weatherAdapter
+
+        val mLayoutManager = LinearLayoutManager(context)
+        rv_hours_weather.layoutManager = mLayoutManager
+
+        mLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+
+//        rv_hours_weather.adapter = weatherAdapter
+//        rv_hours_weather.layoutManager = LinearLayoutManager(context)
 
         swipe_refresh_layout.setOnRefreshListener {
                 getBundle()
@@ -113,6 +128,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
         image_humidity.visible()
         btn_details.visible()
         fl_transparent.visible()
+        rv_hours_weather.visible()
         Toast.makeText(context, "Passed: Updated", Toast.LENGTH_SHORT).show()
     }
 
@@ -137,5 +153,9 @@ class MainFragment : BaseFragment(), MainWeatherView {
         tv_cloudiness.text = cloudiness
         tv_wind.text = wind
         image_clear_sky.setImageResource(icon)
+    }
+
+    override fun getWeatherHoursResponse(list: ArrayList<RvWeatherModel>) {
+        weatherAdapter.updateAdapter(list)
     }
 }

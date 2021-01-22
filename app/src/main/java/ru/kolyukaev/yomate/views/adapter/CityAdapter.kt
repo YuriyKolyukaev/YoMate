@@ -10,12 +10,11 @@ import kotlinx.android.synthetic.main.cell_city.view.*
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.City
 import ru.kolyukaev.yomate.utils.log
-import ru.kolyukaev.yomate.views.fragments.MainFragment
 
 class CityAdapter(
     private val context: Context,
     private val listener: CitiesListener
-): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+): RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
 
     private var mSourceList: ArrayList<City> = ArrayList()
     private var mCityList: ArrayList<City> = ArrayList()
@@ -37,7 +36,7 @@ class CityAdapter(
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {
         val layoutInflater = LayoutInflater.from(context)
         val itemView = layoutInflater.inflate(R.layout.cell_city, parent, false)
         val viewHolder = CityViewHolder(itemView = itemView)
@@ -59,8 +58,8 @@ class CityAdapter(
     }
 
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if(holder is CityViewHolder) {
+    override fun onBindViewHolder(holder: CityViewHolder, position: Int) {
+        if(true) {
             holder.bind(cityModel = mCityList[position], context = context)
         }
     }

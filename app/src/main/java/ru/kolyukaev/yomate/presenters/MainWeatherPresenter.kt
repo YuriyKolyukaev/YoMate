@@ -4,6 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.MainWeatherModel
+import ru.kolyukaev.yomate.data.models.RvWeatherModel
 import ru.kolyukaev.yomate.data.network.api.ApiMethods
 import ru.kolyukaev.yomate.data.providers.MainWeatherProvider
 import ru.kolyukaev.yomate.utils.log
@@ -31,7 +32,7 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
         MainWeatherProvider(presenter = this).loadData(lat1, lon1)
     }
 
-    fun weatherLoaded(weatherList: ArrayList<MainWeatherModel>) {
+    fun mainWeatherLoaded(weatherList: ArrayList<MainWeatherModel>) {
         log("weatherLoaded")
         viewState.endLoading()
         if (weatherList.size == 0) {
@@ -46,6 +47,10 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
             viewState.getWeatherResponse(temperature, pressure, humidity, cloudiness, wind, icon)
             viewState.showComponents()
         }
+    }
+
+    fun rvWeatherLoaded(weatherList: ArrayList<RvWeatherModel>) {
+        viewState.getWeatherHoursResponse(weatherList)
     }
 
     fun photoLoaded(photoString: String) {

@@ -20,7 +20,7 @@ import ru.kolyukaev.yomate.views.adapter.RecyclerItemClickListener
 
 class CityFragment : BaseFragment(), CitiesListener {
 
-    private lateinit var mAdapter: CityAdapter
+    private lateinit var cityAdapter: CityAdapter
 
     lateinit var citiesViewModel: CitiesViewModel
 
@@ -44,8 +44,8 @@ class CityFragment : BaseFragment(), CitiesListener {
         citiesViewModel = ViewModelProvider(this).get(CitiesViewModel::class.java)
 
 
-        mAdapter = CityAdapter(requireContext(), this)
-        rv_city.adapter = mAdapter
+        cityAdapter = CityAdapter(requireContext(), this)
+        rv_city.adapter = cityAdapter
         rv_city.layoutManager = LinearLayoutManager(context)
         rv_city.setHasFixedSize(true)
         rv_city.addOnItemTouchListener(
@@ -75,8 +75,8 @@ class CityFragment : BaseFragment(), CitiesListener {
 //        citiesViewModel.convert(inputStream, requireContext().filesDir.absolutePath)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    fun setupCitiesList(cities: ArrayList<City>) {
+        cityAdapter.setupCities(cities)
     }
 
     override fun onPause() {
@@ -90,9 +90,6 @@ class CityFragment : BaseFragment(), CitiesListener {
         et_change_city.visible()
     }
 
-    fun setupCitiesList(cities: ArrayList<City>) {
-        mAdapter.setupCities(cities)
-    }
 
     fun endLoading() {
     }
@@ -124,7 +121,7 @@ class CityFragment : BaseFragment(), CitiesListener {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                mAdapter.filter(s.toString())
+                cityAdapter.filter(s.toString())
             }
         })
     }

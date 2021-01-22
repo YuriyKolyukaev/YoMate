@@ -3,12 +3,12 @@ package ru.kolyukaev.yomate.data.network.api
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
-import ru.kolyukaev.yomate.data.network.response.MainResponse
+import ru.kolyukaev.yomate.data.network.response.MainResponseAll
 
 interface WeatherService {
-    @GET("/data/2.5/weather")
+    @GET("/data/2.5/forecast")
     fun getWeatherData(@Query("id") id: Int,
                        @Query("appid") app_id: String,
-                       @Query("units") units: String): Call<MainResponse>
+                       @Query("units") units: String): Call<MainResponseAll>
 
 }
