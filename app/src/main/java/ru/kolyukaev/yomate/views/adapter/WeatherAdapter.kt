@@ -1,15 +1,16 @@
 package ru.kolyukaev.yomate.views.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.kolyukaev.yomate.R
-import ru.kolyukaev.yomate.data.models.RvWeatherModel
+import ru.kolyukaev.yomate.data.models.RwWeatherAfter
+import ru.kolyukaev.yomate.data.models.RwWeatherBefore
 
-class WeatherAdapter(list: ArrayList<RvWeatherModel>) :
+class WeatherAdapter(list: ArrayList<RwWeatherAfter>) :
     RecyclerView.Adapter<WeatherAdapter.WeatherHolder>() {
 
     var listArray = list
@@ -28,16 +29,22 @@ class WeatherAdapter(list: ArrayList<RvWeatherModel>) :
     }
 
     class WeatherHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tvHourDtTxtDate = itemView.findViewById<TextView>(R.id.tv_hour_dt_txt_date)
+        val tvHourDtTxtTime = itemView.findViewById<TextView>(R.id.tv_hour_dt_txt_time)
         val tvHourTemp = itemView.findViewById<TextView>(R.id.tv_hour_temp)
-        val tvHourPressure = itemView.findViewById<TextView>(R.id.tv_hour_pressure)
+        val ivHourIcon = itemView.findViewById<ImageView>(R.id.iv_hour_icon)
+        val tvHourHumidity = itemView.findViewById<TextView>(R.id.tv_hour_humidity)
 
-        fun bind(weatherList: RvWeatherModel) {
+        fun bind(weatherList: RwWeatherAfter) {
+            tvHourDtTxtDate.text = weatherList.dtTxtDate
+            tvHourDtTxtTime.text = weatherList.dtTxtTime
             tvHourTemp.text = weatherList.temperature.toString()
-            tvHourPressure.text = weatherList.pressure.toString()
+            ivHourIcon.setImageResource(weatherList.icon)
+            tvHourHumidity.text = weatherList.humidity.toString()
         }
     }
 
-    fun updateAdapter(listItems: ArrayList<RvWeatherModel>){
+    fun updateAdapter(listItems: ArrayList<RwWeatherAfter>){
         listArray.clear()
         listArray.addAll(listItems)
         notifyDataSetChanged()

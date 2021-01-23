@@ -13,7 +13,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import ru.kolyukaev.yomate.R
-import ru.kolyukaev.yomate.data.models.RvWeatherModel
+import ru.kolyukaev.yomate.data.models.RwWeatherAfter
+import ru.kolyukaev.yomate.data.models.RwWeatherBefore
 import ru.kolyukaev.yomate.utils.log
 import ru.kolyukaev.yomate.presenters.MainWeatherPresenter
 import ru.kolyukaev.yomate.views.MainWeatherView
@@ -121,13 +122,9 @@ class MainFragment : BaseFragment(), MainWeatherView {
 
     override fun showComponents() {
         image_clear_sky.visible()
-        image_wind.visible()
-        image_cloudiness.visible()
-        image_pressure.visible()
         btn_details.visible()
-        image_humidity.visible()
         btn_details.visible()
-        fl_transparent.visible()
+        rl_transparent1.visible()
         rv_hours_weather.visible()
         Toast.makeText(context, "Passed: Updated", Toast.LENGTH_SHORT).show()
     }
@@ -145,17 +142,20 @@ class MainFragment : BaseFragment(), MainWeatherView {
             .into(iv_background)
     }
 
-    override fun getWeatherResponse(temperature: String, pressure: String, humidity: String,
-                                    cloudiness: String, wind: String, icon: Int) {
+    override fun getWeatherResponse(weather: String, temperature: String, feelsLike: String, pressure: String, humidity: String,
+                                    cloudiness: String, wind: String, icon: Int, visibility: String) {
+        tv_weather_condition.text = weather
         tv_temperature.text = temperature
+        tv_feels_like.text = feelsLike
         tv_pressure.text = pressure
         tv_humidity.text = humidity
         tv_cloudiness.text = cloudiness
         tv_wind.text = wind
         image_clear_sky.setImageResource(icon)
+        tv_visibility.text = visibility
     }
 
-    override fun getWeatherHoursResponse(list: ArrayList<RvWeatherModel>) {
+    override fun getWeatherHoursResponse(list: ArrayList<RwWeatherAfter>) {
         weatherAdapter.updateAdapter(list)
     }
 }

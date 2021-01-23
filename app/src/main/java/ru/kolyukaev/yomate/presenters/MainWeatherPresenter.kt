@@ -4,7 +4,8 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.MainWeatherModel
-import ru.kolyukaev.yomate.data.models.RvWeatherModel
+import ru.kolyukaev.yomate.data.models.RwWeatherAfter
+import ru.kolyukaev.yomate.data.models.RwWeatherBefore
 import ru.kolyukaev.yomate.data.network.api.ApiMethods
 import ru.kolyukaev.yomate.data.providers.MainWeatherProvider
 import ru.kolyukaev.yomate.utils.log
@@ -17,15 +18,15 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
         log("loadingWeatherCity")
         val id1: Int = id ?: ApiMethods.ID
         viewState.startLoading()
-            viewState.endLoading()
-            if (isSuccess) {
-                MainWeatherProvider(presenter = this).loadWeather(id1)
-            } else {
-                viewState.showError("Weather state is incorrect")
-            }
+        viewState.endLoading()
+        if (isSuccess) {
+            MainWeatherProvider(presenter = this).loadWeather(id1)
+        } else {
+            viewState.showError("Weather state is incorrect")
+        }
     }
 
-    fun loadingDataOfCity (lat: Double?, lon: Double?) {
+    fun loadingDataOfCity(lat: Double?, lon: Double?) {
         log("loadingDataOfCity")
         val lat1 = lat ?: ApiMethods.lat
         val lon1 = lon ?: ApiMethods.lon
@@ -36,21 +37,66 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
         log("weatherLoaded")
         viewState.endLoading()
         if (weatherList.size == 0) {
-        viewState.showError("Weather state is empty")
+            viewState.showError("Weather state is empty")
         } else {
-            val temperature = "${weatherList[0].temperature} С°"
-            val pressure = "Давление ${weatherList[0].pressure} mm Hg"
-            val humidity = "Влажность ${weatherList[0].humidity} %"
-            val cloudiness = "Облачность ${weatherList[0].cloudiness}%"
-            val wind = "Скорость ветра ${weatherList[0].wind} m/s"
+            val weather = weatherList[0].weather
+            val temperature = "${weatherList[0].temperature.toInt()} С°"
+            val feelsLike = "Feels like ${weatherList[0].feelsLike.toInt()} С°"
+            val pressure = "Pressure ${weatherList[0].pressure} mm Hg"
+            val humidity = "Humidity ${weatherList[0].humidity} %"
+            val cloudiness = "Cloudiness ${weatherList[0].cloudiness} %"
+            val wind = "Wind speed ${weatherList[0].wind.toInt()} m/s"
             val icon = getIconWeather(weatherList[0].icon)
-            viewState.getWeatherResponse(temperature, pressure, humidity, cloudiness, wind, icon)
+            val visibility = "Visibility ${weatherList[0].visibility} m"
+            viewState.getWeatherResponse(
+                weather,
+                temperature,
+                feelsLike,
+                pressure,
+                humidity,
+                cloudiness,
+                wind,
+                icon,
+                visibility
+            )
             viewState.showComponents()
         }
     }
 
-    fun rvWeatherLoaded(weatherList: ArrayList<RvWeatherModel>) {
-        viewState.getWeatherHoursResponse(weatherList)
+    fun rvWeatherLoaded(weatherList: ArrayList<RwWeatherBefore>) {
+
+        val rvWeatherList: ArrayList<RwWeatherAfter> = ArrayList()
+
+        log("weatherList ${weatherList.size}")
+        weatherList.forEach() {
+
+            val rvWeather = RwWeatherAfter(
+                dtTxtDate = getSubstringDate(it.dtTxtDate),
+                dtTxtTime = getSubstringTime(it.dtTxtTime),
+                temperature = "t = ${it.temperature.toInt()} С°",
+                icon = getIconWeather(it.icon),
+                humidity = "φ = ${it.humidity} %"
+            )
+            rvWeatherList.add(rvWeather)
+        }
+
+        viewState.getWeatherHoursResponse(rvWeatherList)
+    }
+
+    fun getSubstringDate(s: String): String {
+
+        val sub = s
+        val substring = sub.substring(0, 10)
+
+        return substring
+    }
+
+    fun getSubstringTime(s: String): String {
+
+        val sub = s
+        val substring = sub.substring(12, 16)
+
+        return substring
     }
 
     fun photoLoaded(photoString: String) {
@@ -87,6 +133,4 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
 
     fun loadingWeatherDetails() {
     }
-
-
 }

@@ -4,16 +4,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.kolyukaev.yomate.data.models.DataOfCityModel
-import ru.kolyukaev.yomate.utils.log
 import ru.kolyukaev.yomate.data.models.MainWeatherModel
-import ru.kolyukaev.yomate.data.models.RvWeatherModel
+import ru.kolyukaev.yomate.data.models.RwWeatherBefore
 import ru.kolyukaev.yomate.data.network.RestClient
 import ru.kolyukaev.yomate.data.network.api.ApiMethods
 import ru.kolyukaev.yomate.data.network.response.DataOfCityResponse
-import ru.kolyukaev.yomate.data.network.response.MainResponse
 import ru.kolyukaev.yomate.data.network.response.MainResponseAll
 import ru.kolyukaev.yomate.presenters.MainWeatherPresenter
-import kotlin.reflect.jvm.kotlinFunction
+import ru.kolyukaev.yomate.utils.log
 
 class MainWeatherProvider(var presenter: MainWeatherPresenter) {
 
@@ -42,35 +40,42 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
                     val mainWeatherList: ArrayList<MainWeatherModel> = ArrayList()
 
                     val mainWeather = MainWeatherModel(
-                        temperature = weatherResponse.list!![0].main!!.temp!!,
+                        weather = weatherResponse.list!![0].weather!![0]!!.main!!,
+                        temperature = weatherResponse.list[0].main!!.temp!!,
+                        feelsLike = weatherResponse.list[0].main!!.feelsLike!!,
                         pressure = weatherResponse.list[0].main!!.pressure!!,
                         humidity = weatherResponse.list[0].main!!.humidity!!,
                         cloudiness = weatherResponse.list[0].clouds!!.all!!,
                         wind = weatherResponse.list[0].wind!!.speed!!,
-                        icon = weatherResponse.list[0].weather!![0]!!.icon!!.toString()
+                        icon = weatherResponse.list[0].weather!![0]!!.icon!!.toString(),
+                        visibility = weatherResponse.list[0].visibility!!
                     )
 
                     mainWeatherList.add(mainWeather)
                     presenter.mainWeatherLoaded(mainWeatherList)
 
-                    val rvWeatherList: ArrayList<RvWeatherModel> = ArrayList()
+                    val rvWeatherList: ArrayList<RwWeatherBefore> = ArrayList()
 
-                    weatherResponse.list.forEach {
-                        val rvWeather = RvWeatherModel(
+                    weatherResponse.list.forEach() {
+                        val rvWeather = RwWeatherBefore(
+                            dtTxtDate = it.dtTxt.toString(),
+                            dtTxtTime = it.dtTxt.toString(),
                             temperature = it.main!!.temp!!,
-                            pressure = it.main.pressure!!
+                            icon = it.weather!!.first()!!.icon!!,
+                            humidity = it.main.humidity!!
                         )
                         rvWeatherList.add(rvWeather)
                     }
 
 //                    for (i in 1..39) {
-//                        val rvWeather = RvWeatherModel(
+//                        val rvWeather = RwWeatherBefore(
 //                            temperature = weatherResponse.list[i].main!!.temp!!,
 //                            pressure = weatherResponse.list[i].main!!.pressure!!
 //                        )
 //
 //                        rvWeatherList.add(rvWeather)
 //                    }
+
                     presenter.rvWeatherLoaded(rvWeatherList)
                 }
             }
@@ -78,7 +83,7 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
     }
 
     fun loadData(lat: Double, lon: Double) {
-        val location: String = "${lat},${lon}"
+        val location = "${lat},${lon}"
         log("location = $location")
         val call: Call<DataOfCityResponse> = placesService.getDataOfCity(
             key = ApiMethods.KEYG,
