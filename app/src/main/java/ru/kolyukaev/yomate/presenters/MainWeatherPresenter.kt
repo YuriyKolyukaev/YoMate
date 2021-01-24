@@ -42,12 +42,13 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
             val weather = weatherList[0].weather
             val temperature = "${weatherList[0].temperature.toInt()} С°"
             val feelsLike = "Feels like ${weatherList[0].feelsLike.toInt()} С°"
-            val pressure = "Pressure ${weatherList[0].pressure} mm Hg"
-            val humidity = "Humidity ${weatherList[0].humidity} %"
-            val cloudiness = "Cloudiness ${weatherList[0].cloudiness} %"
-            val wind = "Wind speed ${weatherList[0].wind.toInt()} m/s"
             val icon = getIconWeather(weatherList[0].icon)
-            val visibility = "Visibility ${weatherList[0].visibility} m"
+            val humidity = "${weatherList[0].humidity} %"
+            val cloudiness = "${weatherList[0].cloudiness} %"
+            val pressure = "${weatherList[0].pressure.toInt()} mm Hg"
+            val wind = "${weatherList[0].wind.toInt()} m/s"
+            val visibility = "${weatherList[0].visibility} m"
+            val presipitation = "${weatherList[0].precipitation}"
             viewState.getWeatherResponse(
                 weather,
                 temperature,
@@ -57,7 +58,8 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
                 cloudiness,
                 wind,
                 icon,
-                visibility
+                visibility,
+                presipitation
             )
             viewState.showComponents()
         }
@@ -131,6 +133,4 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
         }
     }
 
-    fun loadingWeatherDetails() {
-    }
 }

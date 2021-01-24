@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="progress_size">15dp</dimen>
-    <dimen name="text_size_rl">20sp</dimen>
+    <dimen name="ll_tv_size">24sp</dimen>
+
+
 </resources>

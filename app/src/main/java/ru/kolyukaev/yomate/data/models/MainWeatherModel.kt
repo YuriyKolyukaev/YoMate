@@ -9,5 +9,6 @@ data class MainWeatherModel(
     var cloudiness: Int,
     var wind: Double,
     var icon: String,
-    var visibility: Int
+    var visibility: Int,
+    var precipitation: Double
 )

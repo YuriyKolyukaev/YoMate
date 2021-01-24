@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ru.kolyukaev.yomate.R
-import ru.kolyukaev.yomate.views.activities.MainActivity
 
 class DetailsFragment: BaseFragment() {
     override val toolbarName: String
@@ -22,12 +21,7 @@ class DetailsFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val activity = (activity as MainActivity)
-
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
 
 }

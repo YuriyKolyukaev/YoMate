@@ -48,7 +48,8 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
                         cloudiness = weatherResponse.list[0].clouds!!.all!!,
                         wind = weatherResponse.list[0].wind!!.speed!!,
                         icon = weatherResponse.list[0].weather!![0]!!.icon!!.toString(),
-                        visibility = weatherResponse.list[0].visibility!!
+                        visibility = weatherResponse.list[0].visibility!!,
+                        precipitation = weatherResponse.list[0].pop!!
                     )
 
                     mainWeatherList.add(mainWeather)
@@ -66,15 +67,6 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
                         )
                         rvWeatherList.add(rvWeather)
                     }
-
-//                    for (i in 1..39) {
-//                        val rvWeather = RwWeatherBefore(
-//                            temperature = weatherResponse.list[i].main!!.temp!!,
-//                            pressure = weatherResponse.list[i].main!!.pressure!!
-//                        )
-//
-//                        rvWeatherList.add(rvWeather)
-//                    }
 
                     presenter.rvWeatherLoaded(rvWeatherList)
                 }
@@ -110,7 +102,7 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
                     val dataOfCityList: ArrayList<DataOfCityModel> = ArrayList()
 
                     val data = DataOfCityModel(
-                        photoReference = dataOfCityResponse.results?.firstOrNull()?.photos?.firstOrNull()?.photoReference
+                        photoReference = dataOfCityResponse.results?.random()?.photos?.firstOrNull()?.photoReference
                             ?: ""
                     )
                     log("photoreference = ${data.photoReference}")

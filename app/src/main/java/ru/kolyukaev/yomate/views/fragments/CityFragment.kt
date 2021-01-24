@@ -27,7 +27,6 @@ class CityFragment : BaseFragment(), CitiesListener {
     override val toolbarName: String
         get() = getString(R.string.cities_fragment_name)
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

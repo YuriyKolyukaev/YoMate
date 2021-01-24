@@ -31,7 +31,6 @@ class CitiesViewModel : ViewModel() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
         }
     }
 
