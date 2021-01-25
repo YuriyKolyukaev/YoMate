@@ -96,22 +96,22 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
             ) {
                 log("response.code = ${response.code()}")
                 if (response.code() == 200) {
+
                     val dataOfCityResponse = response.body()!!
                     log("dataOfCityResponse = $dataOfCityResponse)")
 
                     val dataOfCityList: ArrayList<DataOfCityModel> = ArrayList()
 
-                    val data = DataOfCityModel(
-                        photoReference = dataOfCityResponse.results?.random()?.photos?.firstOrNull()?.photoReference
-                            ?: ""
-                    )
-                    log("photoreference = ${data.photoReference}")
+                    if (dataOfCityResponse.results?.firstOrNull() != null) {
 
-                    val photoString = getPhotoString(data.photoReference)
-
-                    presenter.photoLoaded(photoString)
-
-                    dataOfCityList.add(data)
+                        val data = DataOfCityModel(
+                            photoReference = dataOfCityResponse.results?.random()?.photos?.firstOrNull()?.photoReference
+                                ?: ""
+                        )
+                        val photoString = getPhotoString(data.photoReference)
+                        dataOfCityList.add(data)
+                        presenter.photoLoaded(photoString)
+                    }
                 }
             }
         })

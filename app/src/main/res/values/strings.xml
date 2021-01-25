@@ -3,7 +3,7 @@
     <string name="search_hint">Search</string>
     <string name="city_no_items">city_no_items</string>
     <string name="weathericon">WeatherIcon</string>
-    <string name="cities_fragment_name">Cities</string>
+    <string name="cities_fragment_name">Cities:</string>
     <string name="city_fragment_name">City</string>
     <string name="country_fragment_name">Country</string>
     <string name="details_fragment_name">Details</string>

@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import ru.kolyukaev.yomate.R
 
 class DetailsFragment: BaseFragment() {
-    override val toolbarName: String
-        get() = getString(R.string.details_fragment_name)
 
     override fun onCreateView(
         inflater: LayoutInflater,

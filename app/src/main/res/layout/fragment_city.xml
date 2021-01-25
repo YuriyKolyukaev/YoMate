@@ -9,9 +9,9 @@
     tools:context=".views.activities.MainActivity">
 
     <FrameLayout
-        android:layout_marginTop="54dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
         tools:ignore="UselessParent">
 
         <ProgressBar
@@ -31,33 +31,15 @@
             android:layout_height="match_parent"
             android:layout_marginTop="10dp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/city_no_items"
-            android:visibility="gone" />
-
-        <ProgressBar
-            android:id="@+id/pb_loading"
-            android:layout_width="@dimen/progress_size"
-            android:layout_height="@dimen/progress_size"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:progress="10"
-            android:progressDrawable="@drawable/circle"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </FrameLayout>
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_main_fragment"
+        android:id="@+id/toolbar_city_fragment"
         style="@style/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:background="@android:drawable/editbox_background"
+        android:background="@drawable/bg_rounded_corners_semi_transparent"
         android:backgroundTint="@color/color_crystal">
 
         <LinearLayout
@@ -65,38 +47,51 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_choose_cities"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="@string/cities_fragment_name"
-                android:textColor="@color/color_white"
-                android:textSize="25sp" />
 
-            <TextView
-                android:id="@+id/tv_cities_loading"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="4.5"
                 android:gravity="center_vertical"
-                android:text="@string/loading"
-                android:textColor="@color/color_white"
-                android:textSize="25sp" />
+                android:paddingEnd="4dp">
 
-            <EditText
-                android:id="@+id/et_change_city"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:hint="@string/enter_city"
-                android:maxLines="1"
-                android:textColor="@color/color_light_gray"
-                android:textSize="20sp"
-                android:visibility="gone" />
+                <Button
+                    android:id="@+id/bt_back_cities_fragment"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/back_button"
+                    android:onClick="onClickBack" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_cities_loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/loading"
+                    android:textColor="@color/color_white"
+                    android:textSize="25sp" />
+
+                <EditText
+                    android:id="@+id/et_change_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:hint="@string/enter_city"
+                    android:maxLines="1"
+                    android:textColor="@color/color_light_gray"
+                    android:textSize="20sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 </FrameLayout>

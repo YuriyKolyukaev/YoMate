@@ -1,7 +1,7 @@
 package ru.kolyukaev.yomate.views.activities
-
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -42,6 +42,16 @@ class MainActivity : MvpAppCompatActivity() {
         }
     }
 
+    fun onClickBack(view: View) {
+        val currentFragment = fragmentManager.findFragmentById(R.id.container)
+
+        if (currentFragment is MainFragment) {
+            finish()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     fun commitFragmentTransaction(fragment: Fragment) {
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment)
@@ -49,11 +59,6 @@ class MainActivity : MvpAppCompatActivity() {
         transaction.commit()
     }
 
-    // скрывать клавиатуру
-//    fun View.hideKeyboard() {
-//        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//        imm.hideSoftInputFromWindow(windowToken, 0)
-//    }
 
 //    слушатель
 //    private fun setToolbarTextChangedListener() {
@@ -81,3 +86,4 @@ class MainActivity : MvpAppCompatActivity() {
 //    }
 
 }
+

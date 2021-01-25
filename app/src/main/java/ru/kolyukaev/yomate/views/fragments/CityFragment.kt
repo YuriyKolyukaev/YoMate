@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_city.*
+import kotlinx.android.synthetic.main.fragment_main.*
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.City
 import ru.kolyukaev.yomate.utils.gone
@@ -23,9 +24,6 @@ class CityFragment : BaseFragment(), CitiesListener {
     private lateinit var cityAdapter: CityAdapter
 
     lateinit var citiesViewModel: CitiesViewModel
-
-    override val toolbarName: String
-        get() = getString(R.string.cities_fragment_name)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,20 +57,24 @@ class CityFragment : BaseFragment(), CitiesListener {
 
         citiesViewModel.citiesLiveData.observe(viewLifecycleOwner, Observer {
             setupCitiesList(it as ArrayList<City>)
-            startLoading()
+            endLoading()
         })
 
         citiesViewModel.mainWeatherLiveData.observe(viewLifecycleOwner, Observer {
         })
 
+
+
         citiesViewModel.getCities(inputStream)
 
         setToolbarTextChangedListener()
+
 
 //        Функция во вьюмоделе, которая конвертирует json в файл с объектом List<City>
 //        val inputStream = resources.openRawResource(R.raw.cities)
 //        citiesViewModel.convert(inputStream, requireContext().filesDir.absolutePath)
     }
+
 
     fun setupCitiesList(cities: ArrayList<City>) {
         cityAdapter.setupCities(cities)
@@ -80,17 +82,14 @@ class CityFragment : BaseFragment(), CitiesListener {
 
     override fun onPause() {
         et_change_city.text = null
+        et_change_city.hideKeyboard()
         super.onPause()
     }
 
-    fun startLoading() {
+    fun endLoading() {
         pb_load.gone()
         tv_cities_loading.gone()
         et_change_city.visible()
-    }
-
-
-    fun endLoading() {
     }
 
     fun showError(text: String) {
@@ -124,6 +123,7 @@ class CityFragment : BaseFragment(), CitiesListener {
             }
         })
     }
+
 
 //    (при использовании тулбара в активити) лямда с помощью который передаем текст из
 //    edit text activity в адаптер

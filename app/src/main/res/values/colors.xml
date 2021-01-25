@@ -13,5 +13,6 @@
     <color name="color_crystal_start">#00000000</color>
     <color name="color_crystal">#80000000</color>
     <color name="color_light_gray">#BDBDBD</color>
+    <color name="transparent_max">#00000000</color>
 
 </resources>

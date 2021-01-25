@@ -18,7 +18,6 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
         log("loadingWeatherCity")
         val id1: Int = id ?: ApiMethods.ID
         viewState.startLoading()
-        viewState.endLoading()
         if (isSuccess) {
             MainWeatherProvider(presenter = this).loadWeather(id1)
         } else {
@@ -36,6 +35,7 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
     fun mainWeatherLoaded(weatherList: ArrayList<MainWeatherModel>) {
         log("weatherLoaded")
         viewState.endLoading()
+        viewState.showComponents()
         if (weatherList.size == 0) {
             viewState.showError("Weather state is empty")
         } else {
@@ -61,7 +61,6 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
                 visibility,
                 presipitation
             )
-            viewState.showComponents()
         }
     }
 
@@ -103,6 +102,7 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
 
     fun photoLoaded(photoString: String) {
         viewState.replaceBackground(photoString)
+
     }
 
     fun onError(t: String) {

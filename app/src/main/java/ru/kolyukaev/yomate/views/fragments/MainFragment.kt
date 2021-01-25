@@ -1,27 +1,30 @@
 package ru.kolyukaev.yomate.views.fragments
 
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.*
+import kotlinx.android.synthetic.main.fragment_city.*
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main.pb_loading
+import kotlinx.android.synthetic.main.fragment_main.toolbar_main_fragment
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.RwWeatherAfter
-import ru.kolyukaev.yomate.utils.log
 import ru.kolyukaev.yomate.presenters.MainWeatherPresenter
+import ru.kolyukaev.yomate.utils.*
 import ru.kolyukaev.yomate.views.MainWeatherView
 import ru.kolyukaev.yomate.views.activities.MainActivity
-import ru.kolyukaev.yomate.utils.visible
 import ru.kolyukaev.yomate.views.adapter.WeatherAdapter
+
 
 class MainFragment : BaseFragment(), MainWeatherView {
 
@@ -29,10 +32,6 @@ class MainFragment : BaseFragment(), MainWeatherView {
     lateinit var mainWeatherPresenter: MainWeatherPresenter
 
     val weatherAdapter = WeatherAdapter(ArrayList())
-
-    override val toolbarName: String
-        get() = getString(R.string.app_name)
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,22 +45,17 @@ class MainFragment : BaseFragment(), MainWeatherView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rv_hours_weather.adapter = weatherAdapter
+        rv_weather_hours.adapter = weatherAdapter
 
         val mLayoutManager = LinearLayoutManager(context)
         mLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
 
-        rv_hours_weather.layoutManager = mLayoutManager
-
+        rv_weather_hours.layoutManager = mLayoutManager
 
         swipe_refresh_layout.setOnRefreshListener {
             getBundle()
             swipe_refresh_layout.isRefreshing = false
         }
-
-        swipe_refresh_layout.setColorSchemeColors(
-            resources.getColor(R.color.colorProgressBar)
-        )
 
         getBundle()
 
@@ -74,9 +68,13 @@ class MainFragment : BaseFragment(), MainWeatherView {
                 log("commitFragmentTransaction fragment2")
             }
             return@setOnMenuItemClickListener true
-
         }
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        log("onStart")
         setIndentTopAndBottom()
     }
 
@@ -113,25 +111,28 @@ class MainFragment : BaseFragment(), MainWeatherView {
         tv_change_country.text = country
     }
 
-    fun setIndentTopAndBottom () {
-        val displayMetrics = DisplayMetrics()
+    override fun setIndentTopAndBottom() {
 
-        (activity as MainActivity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val constViewsSumHeight = pxFromDp(view!!.context, 700)
+        val rvLayoutParams = rv_weather_hours.layoutParams as? ConstraintLayout.LayoutParams
 
-        val indentTop = cl_transparent.layoutParams as? ConstraintLayout.LayoutParams
+        swipe_refresh_layout.doOnNextLayout {
+            cl_big_weather.doOnNextLayout {
 
-        val indentBottom = rv_hours_weather.layoutParams as? ConstraintLayout.LayoutParams
+                val swipeLayoutHeight = swipe_refresh_layout.height
 
-        val height = displayMetrics.heightPixels
+                val indentTop =
+                    swipeLayoutHeight - cl_big_weather.height - pxFromDp(view!!.context, 8)
+                cl_big_weather.setMargins(top = indentTop)
 
-        indentTop?.topMargin = height - 500
+                if (swipeLayoutHeight > (constViewsSumHeight)) {
+                    val indentBottom = (swipeLayoutHeight - constViewsSumHeight) / 2
 
-        if (height > 1900) {
-            val h = (height - 1900)/2
 
-            log("heightH = $h")
+                    rvLayoutParams?.bottomMargin = indentBottom
+                }
+            }
 
-            indentBottom?.bottomMargin = h
         }
     }
 
@@ -144,9 +145,10 @@ class MainFragment : BaseFragment(), MainWeatherView {
     }
 
     override fun showComponents() {
+        cl_big_weather.setBackgroundResource(R.drawable.bg_rounded_corners_semi_transparent)
         image_clear_sky.visible()
         ll_transparent.visible()
-        rv_hours_weather.visible()
+        rv_weather_hours.visible()
         Toast.makeText(context, "Passed: Updated", Toast.LENGTH_SHORT).show()
     }
 
@@ -182,4 +184,6 @@ class MainFragment : BaseFragment(), MainWeatherView {
     override fun getWeatherHoursResponse(list: ArrayList<RwWeatherAfter>) {
         weatherAdapter.updateAdapter(list)
     }
+
+
 }
