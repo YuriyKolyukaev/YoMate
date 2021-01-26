@@ -1,6 +1,6 @@
 package ru.kolyukaev.yomate.data.models
 
-data class DataOfCityModel (
+data class PhotoOfCityModel (
     val photoReference: String
 )
 

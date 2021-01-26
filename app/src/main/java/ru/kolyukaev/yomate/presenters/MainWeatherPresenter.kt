@@ -29,7 +29,7 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
         log("loadingDataOfCity")
         val lat1 = lat ?: ApiMethods.lat
         val lon1 = lon ?: ApiMethods.lon
-        MainWeatherProvider(presenter = this).loadData(lat1, lon1)
+        MainWeatherProvider(presenter = this).loadPhoto(lat1, lon1)
     }
 
     fun mainWeatherLoaded(weatherList: ArrayList<MainWeatherModel>) {
@@ -81,6 +81,7 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
             rvWeatherList.add(rvWeather)
         }
 
+        viewState.setIndentTopAndBottom()
         viewState.getWeatherHoursResponse(rvWeatherList)
     }
 

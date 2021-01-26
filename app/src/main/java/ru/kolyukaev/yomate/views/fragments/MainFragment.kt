@@ -1,5 +1,8 @@
 package ru.kolyukaev.yomate.views.fragments
 
+import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,11 +10,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.*
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_city.*
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -24,6 +33,7 @@ import ru.kolyukaev.yomate.utils.*
 import ru.kolyukaev.yomate.views.MainWeatherView
 import ru.kolyukaev.yomate.views.activities.MainActivity
 import ru.kolyukaev.yomate.views.adapter.WeatherAdapter
+import kotlin.random.Random
 
 
 class MainFragment : BaseFragment(), MainWeatherView {
@@ -32,6 +42,8 @@ class MainFragment : BaseFragment(), MainWeatherView {
     lateinit var mainWeatherPresenter: MainWeatherPresenter
 
     val weatherAdapter = WeatherAdapter(ArrayList())
+
+    private var mainImage: Bitmap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,12 +82,15 @@ class MainFragment : BaseFragment(), MainWeatherView {
             return@setOnMenuItemClickListener true
         }
 
+        val i = Random.nextInt(1, 20)
+
+        log("random i = $i")
+
     }
 
     override fun onStart() {
         super.onStart()
         log("onStart")
-        setIndentTopAndBottom()
     }
 
     fun getBundle() {
@@ -115,9 +130,12 @@ class MainFragment : BaseFragment(), MainWeatherView {
 
         val constViewsSumHeight = pxFromDp(view!!.context, 700)
         val rvLayoutParams = rv_weather_hours.layoutParams as? ConstraintLayout.LayoutParams
+        log("setIndentTopAndBottom ${swipe_refresh_layout.isVisible}")
 
-        swipe_refresh_layout.doOnNextLayout {
-            cl_big_weather.doOnNextLayout {
+        swipe_refresh_layout.doOnLayout {
+            cl_big_weather.doOnLayout {
+
+                log("setIndentTopAndBottom ${swipe_refresh_layout.height}")
 
                 val swipeLayoutHeight = swipe_refresh_layout.height
 
@@ -145,11 +163,8 @@ class MainFragment : BaseFragment(), MainWeatherView {
     }
 
     override fun showComponents() {
-        cl_big_weather.setBackgroundResource(R.drawable.bg_rounded_corners_semi_transparent)
-        image_clear_sky.visible()
-        ll_transparent.visible()
-        rv_weather_hours.visible()
-        Toast.makeText(context, "Passed: Updated", Toast.LENGTH_SHORT).show()
+        sv_background.visible()
+        Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show()
     }
 
     override fun showError(text: String) {
@@ -158,11 +173,55 @@ class MainFragment : BaseFragment(), MainWeatherView {
 
     override fun replaceBackground(photoString: String) {
         Glide.with(this)
+            .asBitmap()
             .load(photoString)
             .placeholder(iv_background.drawable)
             // плавная смена картинки
-            .transition(DrawableTransitionOptions.withCrossFade())
+            .listener(object : RequestListener<Bitmap> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Bitmap>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return false
+                }
+                override fun onResourceReady(
+                    resource: Bitmap?,
+                    model: Any?,
+                    target: Target<Bitmap>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    mainImage = resource
+                    if (mainImage != null) {
+                        getColorFromBitmap(mainImage!!)
+                    }
+                    return false
+                }
+            })
+            .transition(BitmapTransitionOptions.withCrossFade())
             .into(iv_background)
+    }
+
+    private fun getColorFromBitmap(bitmap: Bitmap) {
+
+        Palette.from(bitmap).generate { palette ->
+            val vibrantSwatch = palette?.darkMutedSwatch
+            val backgroundColor = vibrantSwatch?.rgb ?: ContextCompat.getColor(requireContext(), R.color.color_crystal)
+            setAccentColorViews(backgroundColor)
+        }
+    }
+
+    fun colorStateListOf(color: Int): ColorStateList {
+        return ColorStateList.valueOf(color)
+    }
+
+    private fun setAccentColorViews(backgroundColor: Int?) {
+        toolbar_main_fragment.backgroundTintList = colorStateListOf(backgroundColor!!)
+        cl_big_weather.backgroundTintList = colorStateListOf(backgroundColor)
+        ll_transparent.backgroundTintList = colorStateListOf(backgroundColor)
+        rv_weather_hours.backgroundTintList = colorStateListOf(backgroundColor)
     }
 
     override fun getWeatherResponse(

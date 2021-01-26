@@ -3,7 +3,7 @@ package ru.kolyukaev.yomate.data.providers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.kolyukaev.yomate.data.models.DataOfCityModel
+import ru.kolyukaev.yomate.data.models.PhotoOfCityModel
 import ru.kolyukaev.yomate.data.models.MainWeatherModel
 import ru.kolyukaev.yomate.data.models.RwWeatherBefore
 import ru.kolyukaev.yomate.data.network.RestClient
@@ -74,9 +74,11 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
         })
     }
 
-    fun loadData(lat: Double, lon: Double) {
+    fun loadPhoto(lat: Double, lon: Double) {
         val location = "${lat},${lon}"
         log("location = $location")
+        val photoOfCityList: ArrayList<PhotoOfCityModel> = ArrayList()
+
         val call: Call<DataOfCityResponse> = placesService.getDataOfCity(
             key = ApiMethods.KEYG,
             location = location,
@@ -86,30 +88,43 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
 
         call.enqueue(object : Callback<DataOfCityResponse> {
             override fun onFailure(call: Call<DataOfCityResponse>, t: Throwable) {
-                log("onFailure = ${t.message}")
                 presenter.onError("City of data request error")
             }
 
             override fun onResponse(
                 call: Call<DataOfCityResponse>,
                 response: Response<DataOfCityResponse>
+
             ) {
                 log("response.code = ${response.code()}")
                 if (response.code() == 200) {
 
                     val dataOfCityResponse = response.body()!!
-                    log("dataOfCityResponse = $dataOfCityResponse)")
+                    val resultList = dataOfCityResponse.results?.firstOrNull()
+                    val photosList = dataOfCityResponse.results?.firstOrNull()?.photos
 
-                    val dataOfCityList: ArrayList<DataOfCityModel> = ArrayList()
+                    if (resultList != null && photosList != null) {
 
-                    if (dataOfCityResponse.results?.firstOrNull() != null) {
+                        dataOfCityResponse.results?.forEach() {
+                            val photoReference = it.photos?.firstOrNull()?.photoReference ?: ""
+                            val photoHeight = it.photos?.firstOrNull()?.height ?: 0
+                            val photoWidth = it.photos?.firstOrNull()?.width ?: 0
 
-                        val data = DataOfCityModel(
-                            photoReference = dataOfCityResponse.results?.random()?.photos?.firstOrNull()?.photoReference
-                                ?: ""
+                            if (photoReference != "" && photoHeight >= 600 && photoWidth >= 600) {
+                                val photo = PhotoOfCityModel(
+                                    photoReference = photoReference
+                                )
+                                photoOfCityList.add(photo)
+                            }
+                        }
+
+                        val data = PhotoOfCityModel(
+                            photoReference = photoOfCityList.random().photoReference
+
                         )
+
                         val photoString = getPhotoString(data.photoReference)
-                        dataOfCityList.add(data)
+                        photoOfCityList.add(data)
                         presenter.photoLoaded(photoString)
                     }
                 }
@@ -125,4 +140,5 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
         ).request().url
         return photoUrl.toString()
     }
+
 }

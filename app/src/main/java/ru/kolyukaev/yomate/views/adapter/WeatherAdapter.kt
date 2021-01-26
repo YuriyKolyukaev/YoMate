@@ -38,9 +38,9 @@ class WeatherAdapter(list: ArrayList<RwWeatherAfter>) :
         fun bind(weatherList: RwWeatherAfter) {
             tvHourDtTxtDate.text = weatherList.dtTxtDate
             tvHourDtTxtTime.text = weatherList.dtTxtTime
-            tvHourTemp.text = weatherList.temperature.toString()
+            tvHourTemp.text = weatherList.temperature
             ivHourIcon.setImageResource(weatherList.icon)
-            tvHourHumidity.text = weatherList.humidity.toString()
+            tvHourHumidity.text = weatherList.humidity
         }
     }
 
