@@ -76,4 +76,5 @@ class CityAdapter(
             mTvState.text = cityModel.state
         }
     }
+
 }

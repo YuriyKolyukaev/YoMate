@@ -40,16 +40,16 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
                     val mainWeatherList: ArrayList<MainWeatherModel> = ArrayList()
 
                     val mainWeather = MainWeatherModel(
-                        weather = weatherResponse.list!![0].weather!![0]!!.main!!,
-                        temperature = weatherResponse.list[0].main!!.temp!!,
-                        feelsLike = weatherResponse.list[0].main!!.feelsLike!!,
-                        pressure = weatherResponse.list[0].main!!.pressure!!,
-                        humidity = weatherResponse.list[0].main!!.humidity!!,
-                        cloudiness = weatherResponse.list[0].clouds!!.all!!,
-                        wind = weatherResponse.list[0].wind!!.speed!!,
-                        icon = weatherResponse.list[0].weather!![0]!!.icon!!.toString(),
-                        visibility = weatherResponse.list[0].visibility!!,
-                        precipitation = weatherResponse.list[0].pop!!
+                        weather = weatherResponse.list?.firstOrNull()?.weather?.firstOrNull()?.main ?: "",
+                        temperature = weatherResponse.list?.firstOrNull()?.main?.temp ?: 0.0,
+                        feelsLike = weatherResponse.list?.firstOrNull()?.main?.feelsLike ?: 0.0,
+                        pressure = weatherResponse.list?.firstOrNull()?.main?.pressure ?: 0.0,
+                        humidity = weatherResponse.list?.firstOrNull()?.main?.humidity ?: 0,
+                        cloudiness = weatherResponse.list?.firstOrNull()?.clouds?.all ?: 0,
+                        wind = weatherResponse.list?.firstOrNull()?.wind?.speed ?: 0.0,
+                        icon = weatherResponse.list?.firstOrNull()?.weather?.firstOrNull()?.icon ?: "",
+                        visibility = weatherResponse.list?.firstOrNull()?.visibility ?: 0,
+                        precipitation = weatherResponse.list?.firstOrNull()?.pop ?: 0.0
                     )
 
                     mainWeatherList.add(mainWeather)
@@ -57,13 +57,13 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
 
                     val rvWeatherList: ArrayList<RwWeatherBefore> = ArrayList()
 
-                    weatherResponse.list.forEach() {
+                    weatherResponse.list?.forEach() {
                         val rvWeather = RwWeatherBefore(
                             dtTxtDate = it.dtTxt.toString(),
                             dtTxtTime = it.dtTxt.toString(),
-                            temperature = it.main!!.temp!!,
-                            icon = it.weather!!.first()!!.icon!!,
-                            humidity = it.main.humidity!!
+                            temperature = it.main?.temp ?: 0.0,
+                            icon = it.weather?.first()?.icon ?: "",
+                            humidity = it.main?.humidity ?: 0
                         )
                         rvWeatherList.add(rvWeather)
                     }
@@ -77,7 +77,6 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
     fun loadPhoto(lat: Double, lon: Double) {
         val location = "${lat},${lon}"
         log("location = $location")
-        val photoOfCityList: ArrayList<PhotoOfCityModel> = ArrayList()
 
         val call: Call<DataOfCityResponse> = placesService.getDataOfCity(
             key = ApiMethods.KEYG,
@@ -104,32 +103,37 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
                     val photosList = dataOfCityResponse.results?.firstOrNull()?.photos
 
                     if (resultList != null && photosList != null) {
+                        val photoOfList = setFilterByDimensionsAndReference(dataOfCityResponse)
 
-                        dataOfCityResponse.results?.forEach() {
-                            val photoReference = it.photos?.firstOrNull()?.photoReference ?: ""
-                            val photoHeight = it.photos?.firstOrNull()?.height ?: 0
-                            val photoWidth = it.photos?.firstOrNull()?.width ?: 0
-
-                            if (photoReference != "" && photoHeight >= 600 && photoWidth >= 600) {
-                                val photo = PhotoOfCityModel(
-                                    photoReference = photoReference
-                                )
-                                photoOfCityList.add(photo)
-                            }
+                        if (photoOfList.size != 0) {
+                            val data = PhotoOfCityModel(
+                                photoReference = photoOfList.random().photoReference
+                            )
+                            val photoString = getPhotoString(data.photoReference)
+                            presenter.photoLoaded(photoString)
                         }
-
-                        val data = PhotoOfCityModel(
-                            photoReference = photoOfCityList.random().photoReference
-
-                        )
-
-                        val photoString = getPhotoString(data.photoReference)
-                        photoOfCityList.add(data)
-                        presenter.photoLoaded(photoString)
                     }
                 }
             }
         })
+    }
+
+    fun setFilterByDimensionsAndReference(
+        dataOfCityResponse: DataOfCityResponse
+    ): ArrayList<PhotoOfCityModel> {
+        val photoOfCityList: ArrayList<PhotoOfCityModel> = ArrayList()
+        dataOfCityResponse.results?.forEach() {
+            val photoReference = it.photos?.firstOrNull()?.photoReference ?: ""
+            val photoHeight = it.photos?.firstOrNull()?.height ?: 0
+            val photoWidth = it.photos?.firstOrNull()?.width ?: 0
+            if (photoReference != "" && photoHeight >= 600 && photoWidth >= 600) {
+                val photo = PhotoOfCityModel(
+                    photoReference = photoReference
+                )
+                photoOfCityList.add(photo)
+            }
+        }
+        return photoOfCityList
     }
 
     fun getPhotoString(photoReference: String): String {

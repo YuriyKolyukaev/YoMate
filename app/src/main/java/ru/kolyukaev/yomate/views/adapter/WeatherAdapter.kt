@@ -8,12 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.RwWeatherAfter
-import ru.kolyukaev.yomate.data.models.RwWeatherBefore
 
-class WeatherAdapter(list: ArrayList<RwWeatherAfter>) :
-    RecyclerView.Adapter<WeatherAdapter.WeatherHolder>() {
+class WeatherAdapter : RecyclerView.Adapter<WeatherAdapter.WeatherHolder>() {
 
-    var listArray = list
+    private val listArray = mutableListOf<RwWeatherAfter>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherHolder {
         val inflater = LayoutInflater.from(parent.context)

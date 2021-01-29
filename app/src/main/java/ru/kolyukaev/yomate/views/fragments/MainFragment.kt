@@ -2,7 +2,6 @@ package ru.kolyukaev.yomate.views.fragments
 
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -33,7 +32,6 @@ import ru.kolyukaev.yomate.utils.*
 import ru.kolyukaev.yomate.views.MainWeatherView
 import ru.kolyukaev.yomate.views.activities.MainActivity
 import ru.kolyukaev.yomate.views.adapter.WeatherAdapter
-import kotlin.random.Random
 
 
 class MainFragment : BaseFragment(), MainWeatherView {
@@ -41,7 +39,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
     @InjectPresenter
     lateinit var mainWeatherPresenter: MainWeatherPresenter
 
-    val weatherAdapter = WeatherAdapter(ArrayList())
+    private lateinit var weatherAdapter: WeatherAdapter
 
     private var mainImage: Bitmap? = null
 
@@ -57,6 +55,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        weatherAdapter = WeatherAdapter()
         rv_weather_hours.adapter = weatherAdapter
 
         val mLayoutManager = LinearLayoutManager(context)
@@ -81,17 +80,8 @@ class MainFragment : BaseFragment(), MainWeatherView {
             }
             return@setOnMenuItemClickListener true
         }
-
-        val i = Random.nextInt(1, 20)
-
-        log("random i = $i")
-
     }
 
-    override fun onStart() {
-        super.onStart()
-        log("onStart")
-    }
 
     fun getBundle() {
         val id = arguments?.getInt("id")
@@ -135,16 +125,18 @@ class MainFragment : BaseFragment(), MainWeatherView {
         swipe_refresh_layout.doOnLayout {
             cl_big_weather.doOnLayout {
 
-                log("setIndentTopAndBottom ${swipe_refresh_layout.height}")
+                log("swipe_refresh_layout_height = ${swipe_refresh_layout.height}")
+                log("cl_big_weather_layout_height = ${cl_big_weather.height}")
 
-                val swipeLayoutHeight = swipe_refresh_layout.height
+                val swipeRefreshLayoutHeight = swipe_refresh_layout.height
+                val clBigWeather = cl_big_weather.height
 
                 val indentTop =
-                    swipeLayoutHeight - cl_big_weather.height - pxFromDp(view!!.context, 8)
+                    swipeRefreshLayoutHeight - clBigWeather - pxFromDp(view!!.context, 8)
                 cl_big_weather.setMargins(top = indentTop)
 
-                if (swipeLayoutHeight > (constViewsSumHeight)) {
-                    val indentBottom = (swipeLayoutHeight - constViewsSumHeight) / 2
+                if (swipeRefreshLayoutHeight > (constViewsSumHeight)) {
+                    val indentBottom = (swipeRefreshLayoutHeight - constViewsSumHeight) / 2
 
 
                     rvLayoutParams?.bottomMargin = indentBottom
@@ -240,9 +232,13 @@ class MainFragment : BaseFragment(), MainWeatherView {
         tv_precipitation2.text = precipitation
     }
 
+    override fun onDestroyView() {
+        rv_weather_hours.adapter = null
+        super.onDestroyView()
+    }
+
     override fun getWeatherHoursResponse(list: ArrayList<RwWeatherAfter>) {
         weatherAdapter.updateAdapter(list)
     }
-
 
 }

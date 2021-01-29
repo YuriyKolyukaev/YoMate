@@ -46,8 +46,7 @@ class CityFragment : BaseFragment(), CitiesListener {
         rv_city.layoutManager = LinearLayoutManager(context)
         rv_city.setHasFixedSize(true)
         rv_city.addOnItemTouchListener(
-            RecyclerItemClickListener
-                (rv_city, object : RecyclerItemClickListener.OnItemClickListener {
+            RecyclerItemClickListener(rv_city, object : RecyclerItemClickListener.OnItemClickListener {
                 override fun onItemClick(view: View, position: Int) {
                 }
             })
@@ -122,6 +121,11 @@ class CityFragment : BaseFragment(), CitiesListener {
                 cityAdapter.filter(s.toString())
             }
         })
+    }
+
+    override fun onDestroyView() {
+        rv_city.adapter = null
+        super.onDestroyView()
     }
 
 
