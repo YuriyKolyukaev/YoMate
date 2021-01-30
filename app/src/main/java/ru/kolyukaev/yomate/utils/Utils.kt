@@ -2,6 +2,7 @@ package ru.kolyukaev.yomate.utils
 
 import android.app.Activity
 import android.content.Context
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -52,4 +53,42 @@ fun View.setMargins(left: Int? = null, top: Int? = null, right: Int? = null, bot
         )
         this.requestLayout()
     }
+}
+
+fun doDelayed(time: Long, block: () -> Unit) {
+    Handler().postDelayed({
+        try {
+            block()
+        } catch (e: Exception) {
+            Log.e("KYUS", "doDelayed", e)
+        }
+    }, time)
+}
+
+
+fun poshitatDvaPlusDva(myInterface: DvaPlusDvaResult) {
+
+    val value1 = 2
+    val value2 = 2
+    var result = 0
+    result = value1 + value2
+
+    myInterface.onResult(result)
+}
+
+interface DvaPlusDvaResult {
+    fun onResult(value: Int)
+}
+
+
+fun poshitatDvaPlusDvaKotlin(myFunction: (value1: Int, value2: Int) -> Unit) {
+
+    val value1 = 2
+    val value2 = 2
+    var result = 0
+
+    result = value1 + value2
+
+//    myInterface.onResult(result)
+    myFunction(result, value1)
 }

@@ -3,10 +3,12 @@ package ru.kolyukaev.yomate.views.fragments
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -23,8 +25,6 @@ import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_city.*
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.android.synthetic.main.fragment_main.pb_loading
-import kotlinx.android.synthetic.main.fragment_main.toolbar_main_fragment
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.RwWeatherAfter
 import ru.kolyukaev.yomate.presenters.MainWeatherPresenter
@@ -41,7 +41,11 @@ class MainFragment : BaseFragment(), MainWeatherView {
 
     private lateinit var weatherAdapter: WeatherAdapter
 
+    private val animationInterval = 3000L
+    private lateinit var animationHandler: Handler
+
     private var mainImage: Bitmap? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,6 +58,8 @@ class MainFragment : BaseFragment(), MainWeatherView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val mainActivity = activity as MainActivity
 
         weatherAdapter = WeatherAdapter()
         rv_weather_hours.adapter = weatherAdapter
@@ -75,13 +81,79 @@ class MainFragment : BaseFragment(), MainWeatherView {
         toolbar_main_fragment.setOnMenuItemClickListener { item ->
             Log.i("QWE", "ITEMTEST  ${item.menuInfo} ${item}")
             if (item?.itemId == R.id.action_search) {
-                (activity as MainActivity).commitFragmentTransaction(CityFragment())
+                (mainActivity).commitFragmentTransaction(CityFragment())
                 log("commitFragmentTransaction fragment2")
             }
             return@setOnMenuItemClickListener true
         }
+
+
+        animationHandler = Handler()
+        doDelayed(3000) {
+//            startRepeatingTask()
+        }
+
+        poshitatDvaPlusDva(object : DvaPlusDvaResult {
+            override fun onResult(value: Int) {
+                log("NASH_RESULTAT $value")
+            }
+        })
+
+        poshitatDvaPlusDva(dvaPlusDvaObject)
+
+        poshitatDvaPlusDvaKotlin { value, value2 ->
+            log("NASH_RESULTAT_KOTLIN ${value}")
+        }
+
+        doDelayed(2500) {
+            hintWeatherAnimation()
+            doDelayed(350) {
+                hintWeatherAnimation()
+            }
+        }
+
     }
 
+        var dvaPlusDvaObject = object : DvaPlusDvaResult{
+        override fun onResult(value: Int) {
+            log("NASH_RESULTAT 2 $value")
+        }
+    }
+
+    var animationRunnable: Runnable = object : Runnable {
+        override fun run() {
+            try {
+                hintWeatherAnimation()
+                doDelayed(330) {
+                    hintWeatherAnimation()
+                }
+            } finally {
+                animationHandler.postDelayed(this, animationInterval)
+                stopRepeatingTask()
+            }
+        }
+    }
+
+    private fun startRepeatingTask() {
+        animationRunnable.run()
+    }
+
+    private fun stopRepeatingTask() {
+        animationHandler.removeCallbacks(animationRunnable)
+    }
+
+    private fun hintWeatherAnimation() {
+            cl_big_weather?.animate()
+                ?.setDuration(100)
+                ?.translationY(pxFromDp(requireContext(), -16).toFloat())
+                ?.setInterpolator(DecelerateInterpolator())
+                ?.withEndAction {
+                    cl_big_weather?.animate()
+                        ?.setStartDelay(50)
+                        ?.setDuration(100)
+                        ?.translationY(0f)
+                }
+    }
 
     fun getBundle() {
         val id = arguments?.getInt("id")
@@ -89,6 +161,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
         val country = arguments?.getString("country")
         val lat = arguments?.getDouble("lat")
         val lon = arguments?.getDouble("lon")
+
 
         log("TEST_ARGUMENTS ${arguments?.getInt("id")}")
 
@@ -138,11 +211,9 @@ class MainFragment : BaseFragment(), MainWeatherView {
                 if (swipeRefreshLayoutHeight > (constViewsSumHeight)) {
                     val indentBottom = (swipeRefreshLayoutHeight - constViewsSumHeight) / 2
 
-
                     rvLayoutParams?.bottomMargin = indentBottom
                 }
             }
-
         }
     }
 
@@ -178,6 +249,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
                 ): Boolean {
                     return false
                 }
+
                 override fun onResourceReady(
                     resource: Bitmap?,
                     model: Any?,
@@ -200,7 +272,8 @@ class MainFragment : BaseFragment(), MainWeatherView {
 
         Palette.from(bitmap).generate { palette ->
             val vibrantSwatch = palette?.darkMutedSwatch
-            val backgroundColor = vibrantSwatch?.rgb ?: ContextCompat.getColor(requireContext(), R.color.color_crystal)
+            val backgroundColor =
+                vibrantSwatch?.rgb ?: ContextCompat.getColor(requireContext(), R.color.color_crystal)
             setAccentColorViews(backgroundColor)
         }
     }
@@ -234,6 +307,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
 
     override fun onDestroyView() {
         rv_weather_hours.adapter = null
+        stopRepeatingTask()
         super.onDestroyView()
     }
 

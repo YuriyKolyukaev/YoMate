@@ -1,5 +1,7 @@
 package ru.kolyukaev.yomate.views.activities
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -7,12 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import ru.kolyukaev.yomate.*
-import ru.kolyukaev.yomate.utils.log
+import ru.kolyukaev.yomate.views.fragments.CityFragment
 import ru.kolyukaev.yomate.views.fragments.MainFragment
 
 class MainActivity : MvpAppCompatActivity() {
 
     private lateinit var fragmentManager: FragmentManager
+
+    var firstStart = 0
+    var preferences: SharedPreferences? = null
 
     //    (при использовании тулбара в активити)
     //    var onToolbarTextChanged: ((text: String) -> Unit)? = null
@@ -21,15 +26,36 @@ class MainActivity : MvpAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        log("onCreate (MainActivity)")
-
+        
         fragmentManager = supportFragmentManager
+        preferences = getSharedPreferences("TABLE", Context.MODE_PRIVATE)
+        firstStart = preferences?.getInt("counter", 0)!!
 
-        val mainFragment = MainFragment()
-
-        commitFragmentTransaction(mainFragment)
-        log("commitFragmentTransaction fragment1")
+        setFirstFragment()
         window.statusBarColor = ContextCompat.getColor(this, R.color.color_black)
+    }
+
+    fun setFirstFragment() {
+        val mainFragment = MainFragment()
+        val cityFragment = CityFragment()
+
+        if (firstStart == 0 ) {
+            commitFragmentTransaction(cityFragment)
+        } else {
+            commitFragmentTransaction(mainFragment)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        saveCount(++firstStart)
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    fun saveCount(counter: Int) {
+        val editor = preferences?.edit()
+        editor?.putInt("counter", counter)
+        editor?.apply()
     }
 
     override fun onBackPressed() {
@@ -58,7 +84,6 @@ class MainActivity : MvpAppCompatActivity() {
         transaction.addToBackStack(null)
         transaction.commit()
     }
-
 
 //    слушатель
 //    private fun setToolbarTextChangedListener() {
