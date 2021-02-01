@@ -47,11 +47,11 @@ class MainFragment : BaseFragment(), MainWeatherView {
     private var mainImage: Bitmap? = null
     private lateinit var mainActivity: MainActivity
 
-    var cityId: Int? = null
-    var cityName: String? = null
-    var country: String? = null
-    var lat: Double? = null
-    var lon: Double? = null
+    private var cityId: Int? = null
+    private var cityName: String? = null
+    private var country: String? = null
+    private var lat: Double? = null
+    private var lon: Double? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -164,8 +164,8 @@ class MainFragment : BaseFragment(), MainWeatherView {
     private fun checkPreferenceData(): Boolean {
         val mainActivity = activity as MainActivity
         cityId = mainActivity.preferences?.getInt("id", 0)!!
-        cityName = mainActivity.preferences?.getString("city", "")!!
-        country = mainActivity.preferences?.getString("country", "")!!
+        cityName = mainActivity.preferences?.getString("city", "")
+        country = mainActivity.preferences?.getString("country", "")
         lat = mainActivity.preferences?.getFloat("lat", 0f)!!.toDouble()
         lon = mainActivity.preferences?.getFloat("lon", 0f)!!.toDouble()
         return cityId != 0
