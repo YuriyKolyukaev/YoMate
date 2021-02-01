@@ -1,41 +1,29 @@
 package ru.kolyukaev.yomate.presenters
 
+import android.annotation.SuppressLint
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.MainWeatherModel
 import ru.kolyukaev.yomate.data.models.RwWeatherAfter
 import ru.kolyukaev.yomate.data.models.RwWeatherBefore
-import ru.kolyukaev.yomate.data.network.api.ApiMethods
 import ru.kolyukaev.yomate.data.providers.MainWeatherProvider
 import ru.kolyukaev.yomate.utils.log
 import ru.kolyukaev.yomate.views.MainWeatherView
+import kotlin.collections.ArrayList
 
 @InjectViewState
 class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
 
-    fun loadingWeatherOfCity(isSuccess: Boolean, id: Int?) {
-        log("loadingWeatherCity")
-        val id1: Int = id ?: ApiMethods.ID
-        viewState.startLoading()
-        if (isSuccess) {
-            MainWeatherProvider(presenter = this).loadWeather(id1)
-        } else {
-            viewState.showError("Weather state is incorrect")
-        }
-    }
-
-    fun loadingDataOfCity(lat: Double?, lon: Double?) {
+    fun loadDataOfCity(cityId: Int, lat: Double, lon: Double) {
         log("loadingDataOfCity")
-        val lat1 = lat ?: ApiMethods.lat
-        val lon1 = lon ?: ApiMethods.lon
-        MainWeatherProvider(presenter = this).loadPhoto(lat1, lon1)
+        viewState.startLoading()
+        MainWeatherProvider(presenter = this).loadWeather(cityId)
+        MainWeatherProvider(presenter = this).loadPhoto(lat, lon)
     }
 
-    fun mainWeatherLoaded(weatherList: ArrayList<MainWeatherModel>) {
-        log("weatherLoaded")
+    fun onGeneralWeatherLoaded(weatherList: ArrayList<MainWeatherModel>) {
         viewState.endLoading()
-        viewState.showComponents()
         if (weatherList.size == 0) {
             viewState.showError("Weather state is empty")
         } else {
@@ -64,12 +52,22 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
         }
     }
 
-    fun rvWeatherLoaded(weatherList: ArrayList<RwWeatherBefore>) {
+    @SuppressLint("SimpleDateFormat")
+    fun onListWeatherLoaded(weatherList: ArrayList<RwWeatherBefore>) {
+        log("rvWeatherLoaded")
 
         val rvWeatherList: ArrayList<RwWeatherAfter> = ArrayList()
 
         log("weatherList ${weatherList.size}")
         weatherList.forEach() {
+//            log("it.dtTxtDate  ${it.dtTxtDate} ")
+//            val strDate = it.dtTxtDate
+//            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+//            val date: Date = dateFormat.parse(strDate)
+//            val calendar = Calendar.getInstance()
+//            calendar.time = date
+//            log("it.dtTxtDate  ${it.dtTxtDate}    ||| ${it.dtTxtTime} |||  ${calendar.time}   .${date.month}.${date.year}")
+//            System.out.println(date)
 
             val rvWeather = RwWeatherAfter(
                 dtTxtDate = getSubstringDate(it.dtTxtDate),
@@ -81,8 +79,8 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
             rvWeatherList.add(rvWeather)
         }
 
-        viewState.setIndentTopAndBottom()
         viewState.getWeatherHoursResponse(rvWeatherList)
+        viewState.showComponents()
     }
 
     fun getSubstringDate(s: String): String {
@@ -96,7 +94,7 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
     fun getSubstringTime(s: String): String {
 
         val sub = s
-        val substring = sub.substring(12, 16)
+        val substring = sub.substring(11, 16)
 
         return substring
     }

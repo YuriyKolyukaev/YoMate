@@ -42,13 +42,13 @@ class CityAdapter(
         val viewHolder = CityViewHolder(itemView = itemView)
         itemView.setOnClickListener {
             val currentPosition = viewHolder.adapterPosition
+            val cityId = mCityList[currentPosition].id
+            val cityName = mCityList[currentPosition].name
             val country = mCityList[currentPosition].country
-            val id = mCityList[currentPosition].id
-            val name = mCityList[currentPosition].name
             val lat = mCityList[currentPosition].coord.lat
             val lon = mCityList[currentPosition].coord.lon
-            log("idCity = $id, country = $country  coord = ${mCityList[currentPosition].coord}")
-            listener.onItemClick(country, id, name, lat, lon)
+            log("idCity = $cityId, country = $country  coord = ${mCityList[currentPosition].coord}")
+            listener.onItemClick(cityId, cityName, country, lat, lon)
         }
         return viewHolder
     }

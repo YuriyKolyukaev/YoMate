@@ -77,8 +77,8 @@ dependencies {
     // rxandroid
     implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
 
-    // Leak Canary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
+//    // Leak Canary
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
 
     // SwipeRefreshLayout
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"

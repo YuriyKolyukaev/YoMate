@@ -4,11 +4,11 @@ import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -45,7 +45,13 @@ class MainFragment : BaseFragment(), MainWeatherView {
     private lateinit var animationHandler: Handler
 
     private var mainImage: Bitmap? = null
+    private lateinit var mainActivity: MainActivity
 
+    var cityId: Int? = null
+    var cityName: String? = null
+    var country: String? = null
+    var lat: Double? = null
+    var lon: Double? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,7 +65,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mainActivity = activity as MainActivity
+        mainActivity = activity as MainActivity
 
         weatherAdapter = WeatherAdapter()
         rv_weather_hours.adapter = weatherAdapter
@@ -70,23 +76,28 @@ class MainFragment : BaseFragment(), MainWeatherView {
         rv_weather_hours.layoutManager = mLayoutManager
 
         swipe_refresh_layout.setOnRefreshListener {
-            getBundle()
+            mainWeatherPresenter.loadDataOfCity(cityId!!, lat!!, lon!!)
             swipe_refresh_layout.isRefreshing = false
         }
 
-        getBundle()
+
+        if (checkBundleData() || checkPreferenceData()) {
+            mainWeatherPresenter.loadDataOfCity(cityId!!, lat!!, lon!!)
+            showCityAndCountry(cityName, country)
+        }
 
         toolbar_main_fragment.inflateMenu(R.menu.city_info_menu)
 
         toolbar_main_fragment.setOnMenuItemClickListener { item ->
-            Log.i("QWE", "ITEMTEST  ${item.menuInfo} ${item}")
             if (item?.itemId == R.id.action_search) {
                 (mainActivity).commitFragmentTransaction(CityFragment())
-                log("commitFragmentTransaction fragment2")
             }
             return@setOnMenuItemClickListener true
         }
 
+        tv_change_city.setOnClickListener {
+            (mainActivity).commitFragmentTransaction(CityFragment())
+        }
 
         animationHandler = Handler()
         doDelayed(3000) {
@@ -105,84 +116,62 @@ class MainFragment : BaseFragment(), MainWeatherView {
             log("NASH_RESULTAT_KOTLIN ${value}")
         }
 
-        doDelayed(2500) {
-            hintWeatherAnimation()
-            doDelayed(350) {
-                hintWeatherAnimation()
-            }
-        }
-
+//        doDelayed(2500) {
+//            hintWeatherAnimation()
+//            doDelayed(350) {
+//                hintWeatherAnimation()
+//            }
+//        }
     }
 
-        var dvaPlusDvaObject = object : DvaPlusDvaResult{
+    var dvaPlusDvaObject = object : DvaPlusDvaResult {
         override fun onResult(value: Int) {
             log("NASH_RESULTAT 2 $value")
         }
     }
+//
+//    var animationRunnable: Runnable = object : Runnable {
+//        override fun run() {
+//            try {
+//                hintWeatherAnimation()
+//                doDelayed(330) {
+//                    hintWeatherAnimation()
+//                }
+//            } finally {
+//                animationHandler.postDelayed(this, animationInterval)
+//                stopRepeatingTask()
+//            }
+//        }
+//    }
+//
+//    private fun startRepeatingTask() {
+//        animationRunnable.run()
+//    }
+//
+//    private fun stopRepeatingTask() {
+//        animationHandler.removeCallbacks(animationRunnable)
+//    }
 
-    var animationRunnable: Runnable = object : Runnable {
-        override fun run() {
-            try {
-                hintWeatherAnimation()
-                doDelayed(330) {
-                    hintWeatherAnimation()
-                }
-            } finally {
-                animationHandler.postDelayed(this, animationInterval)
-                stopRepeatingTask()
-            }
-        }
+    private fun checkBundleData(): Boolean {
+        cityId = arguments?.getInt("id")
+        cityName = arguments?.getString("name")
+        country = arguments?.getString("country")
+        lat = arguments?.getDouble("lat")
+        lon = arguments?.getDouble("lon")
+        return cityId != null
     }
 
-    private fun startRepeatingTask() {
-        animationRunnable.run()
+    private fun checkPreferenceData(): Boolean {
+        val mainActivity = activity as MainActivity
+        cityId = mainActivity.preferences?.getInt("id", 0)!!
+        cityName = mainActivity.preferences?.getString("city", "")!!
+        country = mainActivity.preferences?.getString("country", "")!!
+        lat = mainActivity.preferences?.getFloat("lat", 0f)!!.toDouble()
+        lon = mainActivity.preferences?.getFloat("lon", 0f)!!.toDouble()
+        return cityId != 0
     }
 
-    private fun stopRepeatingTask() {
-        animationHandler.removeCallbacks(animationRunnable)
-    }
-
-    private fun hintWeatherAnimation() {
-            cl_big_weather?.animate()
-                ?.setDuration(100)
-                ?.translationY(pxFromDp(requireContext(), -16).toFloat())
-                ?.setInterpolator(DecelerateInterpolator())
-                ?.withEndAction {
-                    cl_big_weather?.animate()
-                        ?.setStartDelay(50)
-                        ?.setDuration(100)
-                        ?.translationY(0f)
-                }
-    }
-
-    fun getBundle() {
-        val id = arguments?.getInt("id")
-        val name = arguments?.getString("name")
-        val country = arguments?.getString("country")
-        val lat = arguments?.getDouble("lat")
-        val lon = arguments?.getDouble("lon")
-
-
-        log("TEST_ARGUMENTS ${arguments?.getInt("id")}")
-
-        id?.apply { sendBundle(country, id, name, lat, lon) } ?: Toast.makeText(
-            context, "Enter your city",
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
-    private fun sendBundle(country: String?, id: Int?, city: String?, lat: Double?, lon: Double?) {
-        log("getBundle $city")
-        if (country == null || city == null || id == 0) {
-            showError("Error request from the list of cities")
-        } else {
-            mainWeatherPresenter.loadingWeatherOfCity(true, id)
-            changeCityAndCountry(country, city)
-            mainWeatherPresenter.loadingDataOfCity(lat, lon)
-        }
-    }
-
-    fun changeCityAndCountry(country: String?, city: String?) {
+    fun showCityAndCountry(country: String?, city: String?) {
         tv_change_city.visible()
         tv_change_country.visible()
         tv_change_city.text = city
@@ -190,30 +179,42 @@ class MainFragment : BaseFragment(), MainWeatherView {
     }
 
     override fun setIndentTopAndBottom() {
-
-        val constViewsSumHeight = pxFromDp(view!!.context, 700)
-        val rvLayoutParams = rv_weather_hours.layoutParams as? ConstraintLayout.LayoutParams
-        log("setIndentTopAndBottom ${swipe_refresh_layout.isVisible}")
-
-        swipe_refresh_layout.doOnLayout {
-            cl_big_weather.doOnLayout {
-
-                log("swipe_refresh_layout_height = ${swipe_refresh_layout.height}")
-                log("cl_big_weather_layout_height = ${cl_big_weather.height}")
-
-                val swipeRefreshLayoutHeight = swipe_refresh_layout.height
-                val clBigWeather = cl_big_weather.height
-
-                val indentTop =
-                    swipeRefreshLayoutHeight - clBigWeather - pxFromDp(view!!.context, 8)
-                cl_big_weather.setMargins(top = indentTop)
-
-                if (swipeRefreshLayoutHeight > (constViewsSumHeight)) {
-                    val indentBottom = (swipeRefreshLayoutHeight - constViewsSumHeight) / 2
-
-                    rvLayoutParams?.bottomMargin = indentBottom
+        if (fl_main.height != 0 && cl_big_weather.height != 0) {
+            setSwipeRefreeshMargin()
+            log("true fl_main.height = ${fl_main.height}, cl_big_weather.height = ${cl_big_weather.height} ")
+        } else {
+            log("false fl_main.height = ${fl_main.height}, cl_big_weather.height = ${cl_big_weather.height} ")
+            fl_main.doOnLayout {
+                cl_big_weather.doOnLayout {
+                    setSwipeRefreeshMargin()
                 }
             }
+        }
+    }
+
+    private fun setSwipeRefreeshMargin() {
+        log("setSwipeRefreeshMargin")
+        val constViewsSumHeight = pxFromDp(view!!.context, 750)
+        val rvLayoutParams = rv_weather_hours.layoutParams as? ConstraintLayout.LayoutParams
+
+        log("setSwipeRefreeshMargin fl_main = ${fl_main.height}")
+        log("setSwipeRefreeshMargin cl_big_weather_layout_height = ${cl_big_weather.height}")
+
+        val swipeRefreshLayoutHeight = fl_main.height
+        val clBigWeather = cl_big_weather.height
+
+        val indentTop = swipeRefreshLayoutHeight - clBigWeather - pxFromDp(view!!.context, 8)
+        cl_big_weather.setMargins(top = indentTop)
+
+        if (swipeRefreshLayoutHeight > (constViewsSumHeight)) {
+            val indentBottom = (swipeRefreshLayoutHeight - constViewsSumHeight) / 2
+
+            rvLayoutParams?.bottomMargin = indentBottom
+        }
+
+        Handler().post {
+            scroll_view?.isSmoothScrollingEnabled = false
+            scroll_view?.fullScroll(ScrollView.FOCUS_UP)
         }
     }
 
@@ -222,12 +223,39 @@ class MainFragment : BaseFragment(), MainWeatherView {
     }
 
     override fun endLoading() {
-        pb_loading.visibility = View.GONE
+        pb_loading.visibility = View.INVISIBLE
+    }
+
+    override fun showHintWeatherAnimation() {
+        log("showHintWeatherAnimation")
+        doDelayed(700) {
+            hintWeatherAnimation()
+            doDelayed(350) {
+                hintWeatherAnimation()
+            }
+        }
+    }
+
+    private fun hintWeatherAnimation() {
+        cl_big_weather?.animate()
+            ?.setDuration(100)
+            ?.translationY(pxFromDp(requireContext(), -18).toFloat())
+            ?.setInterpolator(DecelerateInterpolator())
+            ?.withEndAction {
+                cl_big_weather?.animate()
+                    ?.setStartDelay(50)
+                    ?.setDuration(100)
+                    ?.translationY(0f)
+            }
     }
 
     override fun showComponents() {
-        sv_background.visible()
-        Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show()
+        log("showComponents")
+        log("TESTTEST")
+
+        cl_main.visible()
+        showHintWeatherAnimation()
+        setIndentTopAndBottom()
     }
 
     override fun showError(text: String) {
@@ -285,7 +313,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
     private fun setAccentColorViews(backgroundColor: Int?) {
         toolbar_main_fragment.backgroundTintList = colorStateListOf(backgroundColor!!)
         cl_big_weather.backgroundTintList = colorStateListOf(backgroundColor)
-        ll_transparent.backgroundTintList = colorStateListOf(backgroundColor)
+        ll_detailed_weather.backgroundTintList = colorStateListOf(backgroundColor)
         rv_weather_hours.backgroundTintList = colorStateListOf(backgroundColor)
     }
 
@@ -307,7 +335,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
 
     override fun onDestroyView() {
         rv_weather_hours.adapter = null
-        stopRepeatingTask()
+//        stopRepeatingTask()
         super.onDestroyView()
     }
 

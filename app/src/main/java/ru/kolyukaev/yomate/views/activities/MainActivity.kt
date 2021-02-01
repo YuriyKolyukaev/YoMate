@@ -16,7 +16,7 @@ class MainActivity : MvpAppCompatActivity() {
 
     private lateinit var fragmentManager: FragmentManager
 
-    var firstStart = 0
+    var cityIdState = 0
     var preferences: SharedPreferences? = null
 
     //    (при использовании тулбара в активити)
@@ -29,7 +29,7 @@ class MainActivity : MvpAppCompatActivity() {
         
         fragmentManager = supportFragmentManager
         preferences = getSharedPreferences("TABLE", Context.MODE_PRIVATE)
-        firstStart = preferences?.getInt("counter", 0)!!
+        cityIdState = preferences?.getInt("id", 0)!!
 
         setFirstFragment()
         window.statusBarColor = ContextCompat.getColor(this, R.color.color_black)
@@ -39,24 +39,13 @@ class MainActivity : MvpAppCompatActivity() {
         val mainFragment = MainFragment()
         val cityFragment = CityFragment()
 
-        if (firstStart == 0 ) {
+        if (cityIdState == 0 ) {
             commitFragmentTransaction(cityFragment)
         } else {
             commitFragmentTransaction(mainFragment)
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        saveCount(++firstStart)
-    }
-
-    @SuppressLint("CommitPrefEdits")
-    fun saveCount(counter: Int) {
-        val editor = preferences?.edit()
-        editor?.putInt("counter", counter)
-        editor?.apply()
-    }
 
     override fun onBackPressed() {
         val currentFragment = fragmentManager.findFragmentById(R.id.container)
@@ -69,13 +58,7 @@ class MainActivity : MvpAppCompatActivity() {
     }
 
     fun onClickBack(view: View) {
-        val currentFragment = fragmentManager.findFragmentById(R.id.container)
-
-        if (currentFragment is MainFragment) {
-            finish()
-        } else {
-            super.onBackPressed()
-        }
+        onBackPressed()
     }
 
     fun commitFragmentTransaction(fragment: Fragment) {

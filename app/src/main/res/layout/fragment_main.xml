@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_main"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:background="@drawable/background_fragment_main"
@@ -10,8 +11,8 @@
         android:id="@+id/iv_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
-
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/background_app" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
@@ -19,13 +20,14 @@
         android:layout_height="match_parent">
 
         <ScrollView
-            android:id="@+id/sv_background"
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
             android:fillViewport="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_main"
+                android:visibility="invisible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -42,24 +44,22 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
-
                     <TextView
                         android:id="@+id/tv_temperature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="15dp"
                         android:layout_marginTop="8dp"
                         android:includeFontPadding="false"
                         android:lineSpacingExtra="0dp"
                         android:textColor="@color/color_white"
-                        android:textSize="70sp"
+                        android:textSize="90sp"
                         app:layout_constraintEnd_toStartOf="@+id/image_clear_sky"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
                     <TextView
                         android:id="@+id/tv_feels_like"
                         android:layout_width="wrap_content"
@@ -71,7 +71,6 @@
                         app:layout_constraintEnd_toEndOf="@+id/tv_temperature"
                         app:layout_constraintStart_toStartOf="@+id/tv_temperature"
                         app:layout_constraintTop_toBottomOf="@+id/tv_temperature" />
-
                     <TextView
                         android:id="@+id/tv_weather_condition"
                         android:layout_width="wrap_content"
@@ -83,13 +82,13 @@
                         app:layout_constraintEnd_toEndOf="@+id/tv_temperature"
                         app:layout_constraintStart_toStartOf="@+id/tv_temperature"
                         app:layout_constraintTop_toBottomOf="@+id/tv_feels_like" />
-
                     <ImageView
                         android:id="@+id/image_clear_sky"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
                         android:layout_alignParentTop="true"
-                        android:layout_marginStart="5dp"
+                        android:paddingStart="1dp"
+                        android:paddingEnd="15dp"
                         android:layout_toEndOf="@+id/tv_temperature"
                         android:contentDescription="@string/weathericon"
                         android:foregroundGravity="center_horizontal"
@@ -102,7 +101,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
-                    android:id="@+id/ll_transparent"
+                    android:id="@+id/ll_detailed_weather"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
@@ -126,90 +125,89 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginStart="16dp"
-                            android:drawablePadding="10dp"
                             android:text="Humidity "
                             android:textColor="@color/color_white"
                             android:drawableStart="@drawable/humidity"
+                            android:drawablePadding="10dp"
                             android:maxLines="1"
                             android:ellipsize="end"
-                            android:textSize="@dimen/ll_tv_size" />
-
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
+                            android:textSize="@dimen/ll_detailed_weather_tv_size" />
                         <TextView
                             android:id="@+id/tv_cloudiness1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginStart="16dp"
-                            android:drawablePadding="10dp"
                             android:text="Cloudiness "
                             android:textColor="@color/color_white"
                             android:drawableStart="@drawable/cloudiness"
+                            android:drawablePadding="10dp"
                             android:maxLines="1"
                             android:ellipsize="end"
-                            android:textSize="@dimen/ll_tv_size" />
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
+                            android:textSize="@dimen/ll_detailed_weather_tv_size" />
                         <TextView
                             android:id="@+id/tv_pressure1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginStart="16dp"
                             android:drawablePadding="10dp"
                             android:text="Pressure "
                             android:textColor="@color/color_white"
                             android:drawableStart="@drawable/pressure"
                             android:maxLines="1"
                             android:ellipsize="end"
-                            android:textSize="@dimen/ll_tv_size" />
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
+                            android:textSize="@dimen/ll_detailed_weather_tv_size" />
                         <TextView
                             android:id="@+id/tv_wind1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginStart="16dp"
-                            android:drawablePadding="10dp"
                             android:text="Wind speed "
                             android:textColor="@color/color_white"
                             android:drawableStart="@drawable/wind"
+                            android:drawablePadding="10dp"
                             android:maxLines="1"
                             android:ellipsize="end"
-                            android:textSize="@dimen/ll_tv_size" />
-
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
+                            android:textSize="@dimen/ll_detailed_weather_tv_size" />
                         <TextView
                             android:id="@+id/tv_visibility1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginStart="16dp"
-                            android:drawablePadding="10dp"
                             android:text="Visibility "
                             android:textColor="@color/color_white"
                             android:drawableStart="@drawable/visibility"
+                            android:drawablePadding="10dp"
                             android:maxLines="1"
                             android:ellipsize="end"
-                            android:textSize="@dimen/ll_tv_size" />
-
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
+                            android:textSize="@dimen/ll_detailed_weather_tv_size" />
                         <TextView
                             android:id="@+id/tv_precipitation1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:layout_marginStart="16dp"
-                            android:drawablePadding="10dp"
                             android:text="Precipitation"
                             android:textColor="@color/color_white"
                             android:drawableStart="@drawable/presipitation"
+                            android:drawablePadding="10dp"
                             android:maxLines="1"
                             android:ellipsize="end"
-                            android:textSize="@dimen/ll_tv_size" />
-
+                            android:padding="@dimen/ll_detailed_weather_tv_padding"
+                            android:textSize="@dimen/ll_detailed_weather_tv_size" />
 
                     </LinearLayout>
 
@@ -218,71 +216,64 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
-
                         <TextView
                             android:id="@+id/tv_humidity2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
                             android:textColor="@color/color_white"
-                            android:textSize="@dimen/ll_tv_size" />
-
+                            android:textSize="@dimen/ll_detailed_weather_tv_size" />
                         <TextView
                             android:id="@+id/tv_cloudiness2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginTop="8dp"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
                             android:textColor="@color/color_white"
-                            android:textSize="@dimen/ll_tv_size"
-                            app:layout_constraintStart_toStartOf="parent" />
-
+                            android:textSize="@dimen/ll_detailed_weather_tv_size"/>
                         <TextView
                             android:id="@+id/tv_pressure2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginTop="8dp"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
                             android:textColor="@color/color_white"
-                            android:textSize="@dimen/ll_tv_size"
-                            app:layout_constraintStart_toStartOf="parent"/>
-
+                            android:textSize="@dimen/ll_detailed_weather_tv_size"/>
                         <TextView
                             android:id="@+id/tv_wind2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginTop="8dp"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
                             android:textColor="@color/color_white"
-                            android:textSize="@dimen/ll_tv_size"
-                            app:layout_constraintStart_toStartOf="parent" />
-
+                            android:textSize="@dimen/ll_detailed_weather_tv_size"/>
                         <TextView
                             android:id="@+id/tv_visibility2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginTop="8dp"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
                             android:textColor="@color/color_white"
-                            android:textSize="@dimen/ll_tv_size"
-                            app:layout_constraintStart_toStartOf="parent" />
-
+                            android:textSize="@dimen/ll_detailed_weather_tv_size"/>
                         <TextView
                             android:id="@+id/tv_precipitation2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginTop="8dp"
+                            android:padding="@dimen/ll_detailed_weather_tv_padding"
                             android:textColor="@color/color_white"
-                            android:textSize="@dimen/ll_tv_size"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            android:textSize="@dimen/ll_detailed_weather_tv_size"/>
 
                     </LinearLayout>
 
@@ -302,7 +293,12 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ll_transparent"
+                    app:layout_constraintTop_toBottomOf="@+id/ll_detailed_weather"
+                    android:scrollbarSize="8dp"
+                    android:fadeScrollbars="false"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbarThumbHorizontal="@drawable/scrollbar_white"
+                    android:scrollbarAlwaysDrawHorizontalTrack="true"
                     app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -328,23 +324,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="@string/country_fragment_name"
+                android:padding="4dp"
+                android:text="@string/city_fragment_name"
                 android:textColor="@color/color_white"
                 android:textSize="25sp"
-                android:visibility="gone" />
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/tv_change_city"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:paddingStart="4dp"
-                android:text="@string/city_fragment_name"
+                android:text="@string/country_fragment_name"
                 android:textColor="@color/color_white"
                 android:textSize="25sp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:visibility="gone" />
+                android:visibility="invisible" />
+
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
@@ -356,9 +353,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:progress="10"
-        android:visibility="gone"
-        android:progressDrawable="@drawable/circle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:visibility="invisible"
+        android:progressDrawable="@drawable/circle"/>
 
 </FrameLayout>

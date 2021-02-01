@@ -21,9 +21,7 @@
             android:layout_gravity="center"
             android:progress="10"
             android:progressDrawable="@drawable/circle"
-            android:visibility="visible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:visibility="visible"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_city"
@@ -60,6 +58,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="6dp"
                     android:background="@drawable/back_button"
+                    android:visibility="invisible"
                     android:onClick="onClickBack" />
 
             </LinearLayout>
@@ -89,7 +88,7 @@
                     android:maxLines="1"
                     android:textColor="@color/color_light_gray"
                     android:textSize="20sp"
-                    android:visibility="gone" />
+                    android:visibility="invisible" />
             </LinearLayout>
 
         </LinearLayout>

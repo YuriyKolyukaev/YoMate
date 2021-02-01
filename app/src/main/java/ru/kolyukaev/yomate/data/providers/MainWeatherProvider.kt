@@ -53,7 +53,7 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
                     )
 
                     mainWeatherList.add(mainWeather)
-                    presenter.mainWeatherLoaded(mainWeatherList)
+                    presenter.onGeneralWeatherLoaded(mainWeatherList)
 
                     val rvWeatherList: ArrayList<RwWeatherBefore> = ArrayList()
 
@@ -68,7 +68,7 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
                         rvWeatherList.add(rvWeather)
                     }
 
-                    presenter.rvWeatherLoaded(rvWeatherList)
+                    presenter.onListWeatherLoaded(rvWeatherList)
                 }
             }
         })
@@ -108,6 +108,7 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
                         if (photoOfList.size != 0) {
                             val data = PhotoOfCityModel(
                                 photoReference = photoOfList.random().photoReference
+
                             )
                             val photoString = getPhotoString(data.photoReference)
                             presenter.photoLoaded(photoString)

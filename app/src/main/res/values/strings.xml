@@ -8,7 +8,8 @@
     <string name="country_fragment_name">Country</string>
     <string name="details_fragment_name">Details</string>
     <string name="enter_city">enter your city</string>
-    <string name="loading">loading...</string>
+    <string name="loading">loading…</string>
+    <string name="background_app">background_app</string>
 
 
 </resources>

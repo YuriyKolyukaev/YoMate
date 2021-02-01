@@ -9,12 +9,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_city.*
-import kotlinx.android.synthetic.main.fragment_main.*
 import ru.kolyukaev.yomate.R
 import ru.kolyukaev.yomate.data.models.City
 import ru.kolyukaev.yomate.utils.gone
 import ru.kolyukaev.yomate.utils.visible
 import ru.kolyukaev.yomate.viewmodels.CitiesViewModel
+import ru.kolyukaev.yomate.views.activities.MainActivity
 import ru.kolyukaev.yomate.views.adapter.CitiesListener
 import ru.kolyukaev.yomate.views.adapter.CityAdapter
 import ru.kolyukaev.yomate.views.adapter.RecyclerItemClickListener
@@ -62,12 +62,11 @@ class CityFragment : BaseFragment(), CitiesListener {
         citiesViewModel.mainWeatherLiveData.observe(viewLifecycleOwner, Observer {
         })
 
-
-
         citiesViewModel.getCities(inputStream)
 
         setToolbarTextChangedListener()
 
+        setBtBack()
 
 //        Функция во вьюмоделе, которая конвертирует json в файл с объектом List<City>
 //        val inputStream = resources.openRawResource(R.raw.cities)
@@ -99,18 +98,30 @@ class CityFragment : BaseFragment(), CitiesListener {
         menu.clear()
     }
 
-    override fun onItemClick(country: String, id: Int, name: String, lat: Double, lon: Double) {
+    override fun onItemClick(cityId: Int, cityName: String, country: String, lat: Double, lon: Double) {
         val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
         val mainFragment = MainFragment()
         val bundle = Bundle()
-        bundle.putInt("id", id)
-        bundle.putString("name", name)
+        bundle.putInt("id", cityId)
+        bundle.putString("name", cityName)
         bundle.putString("country", country)
         bundle.putDouble("lat", lat)
         bundle.putDouble("lon", lon)
         mainFragment.arguments = bundle
         transaction.replace(R.id.container, mainFragment)
         transaction.commit()
+        saveDataOfCity(cityId, cityName, country, lat, lon)
+    }
+
+    fun saveDataOfCity(cityId: Int, cityName: String, country: String, lat: Double, lon: Double) {
+        val pref = (activity as MainActivity).preferences
+        val editor = pref?.edit()
+        editor?.putInt("id", cityId)
+        editor?.putString("city", cityName)
+        editor?.putString("country", country)
+        editor?.putFloat("lat", lat.toFloat())
+        editor?.putFloat("lon", lon.toFloat())
+        editor?.apply()
     }
 
     private fun setToolbarTextChangedListener() {
@@ -121,6 +132,12 @@ class CityFragment : BaseFragment(), CitiesListener {
                 cityAdapter.filter(s.toString())
             }
         })
+    }
+
+    fun setBtBack() {
+        if (parentFragmentManager.backStackEntryCount > 1) {
+            bt_back_cities_fragment.visible()
+        }
     }
 
     override fun onDestroyView() {

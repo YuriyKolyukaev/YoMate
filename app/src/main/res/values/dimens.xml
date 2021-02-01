@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="progress_size">15dp</dimen>
-    <dimen name="ll_tv_size">24sp</dimen>
+    <dimen name="ll_detailed_weather_tv_size">18sp</dimen>
+    <dimen name="rv_weather_hours_tv_size">18sp</dimen>
+    <dimen name="ll_detailed_weather_tv_padding">16dp</dimen>
+    <dimen name="rv_weather_hours_tv_padding">16dp</dimen>
+
+
 
 
 </resources>
