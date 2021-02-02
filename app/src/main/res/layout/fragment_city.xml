@@ -15,7 +15,7 @@
         tools:ignore="UselessParent">
 
         <ProgressBar
-            android:id="@+id/pb_load"
+            android:id="@+id/pb_loading_city"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
