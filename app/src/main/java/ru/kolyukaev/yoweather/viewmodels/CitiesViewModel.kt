@@ -53,7 +53,7 @@ class CitiesViewModel : ViewModel() {
                 File(
                     Environment.getExternalStoragePublicDirectory(
                         Environment.DIRECTORY_DOWNLOADS
-                    ), "cities_list_fulll.txt"
+                    ), "cities_list_fullll.txt"
                 )
             )
             val os = ObjectOutputStream(fos)

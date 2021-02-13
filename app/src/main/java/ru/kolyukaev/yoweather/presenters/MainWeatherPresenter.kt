@@ -17,11 +17,10 @@ import kotlin.collections.ArrayList
 @InjectViewState
 class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
 
-    fun loadDataOfCity(cityId: Int, lat: Double, lon: Double) {
+    fun loadDataOfCity(cityId: Int) {
         log("loadingDataOfCity")
         viewState.startLoading()
         MainWeatherProvider(presenter = this).loadWeather(cityId)
-        MainWeatherProvider(presenter = this).loadPhoto(lat, lon)
     }
 
     fun onGeneralWeatherLoaded(weatherList: ArrayList<MainWeatherModel>) {
@@ -56,11 +55,7 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
 
     @SuppressLint("SimpleDateFormat")
     fun onListWeatherLoaded(weatherList: ArrayList<RwWeatherBefore>) {
-        log("rvWeatherLoaded")
-
         val rvWeatherList: ArrayList<RwWeatherAfter> = ArrayList()
-
-        log("weatherList ${weatherList.size}")
         weatherList.forEach() {
             log("it.dtTxtDate  ${it.dtTxtDate} ")
             val strDate = it.dtTxtDate
@@ -68,7 +63,7 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
             val date: Date = dateFormat.parse(strDate)
             val calendar = Calendar.getInstance()
             calendar.time = date
-            log("it.dtTxtDate  ${it.dtTxtDate}    ||| ${it.dtTxtTime} |||  ${calendar.time}")
+            log("it.dtTxtDate  ${it.dtTxtDate} ||| ${it.dtTxtTime} |||  ${calendar.time}")
             System.out.println(date)
 
             val rvWeather = RwWeatherAfter(
@@ -103,7 +98,6 @@ class MainWeatherPresenter : MvpPresenter<MainWeatherView>() {
 
     fun photoLoaded(photoString: String) {
         viewState.replaceBackground(photoString)
-
     }
 
     fun onError(t: String) {

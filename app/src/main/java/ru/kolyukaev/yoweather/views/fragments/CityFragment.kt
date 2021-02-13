@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_city.*
 import ru.kolyukaev.yoweather.R
 import ru.kolyukaev.yoweather.data.models.City
+import ru.kolyukaev.yoweather.data.network.api.ApiMethods
 import ru.kolyukaev.yoweather.utils.gone
 import ru.kolyukaev.yoweather.utils.visible
 import ru.kolyukaev.yoweather.viewmodels.CitiesViewModel
@@ -41,7 +42,6 @@ class CityFragment : BaseFragment(), CitiesListener {
 
         citiesViewModel = ViewModelProvider(this).get(CitiesViewModel::class.java)
 
-
         cityAdapter = CityAdapter(requireContext(), this)
         rv_city.adapter = cityAdapter
         rv_city.layoutManager = LinearLayoutManager(context)
@@ -69,11 +69,10 @@ class CityFragment : BaseFragment(), CitiesListener {
 
         showButtonBack()
 
-//        Функция во вьюмоделе, которая конвертирует json в файл с объектом List<City>
+//      Функция во вьюмоделе, которая конвертирует json в файл с объектом List<City>
 //        val inputStream = resources.openRawResource(R.raw.cities)
 //        citiesViewModel.convert(inputStream, requireContext().filesDir.absolutePath)
     }
-
 
     private fun setupCitiesList(cities: ArrayList<City>) {
         cityAdapter.setupCities(cities)
@@ -95,29 +94,25 @@ class CityFragment : BaseFragment(), CitiesListener {
         menu.clear()
     }
 
-    override fun onItemClick(cityId: Int, cityName: String, country: String, lat: Double, lon: Double) {
+    override fun onItemClick(cityId: Int, cityName: String, country: String) {
         val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
         val mainFragment = MainFragment()
         val bundle = Bundle()
-        bundle.putInt("id", cityId)
-        bundle.putString("name", cityName)
-        bundle.putString("country", country)
-        bundle.putDouble("lat", lat)
-        bundle.putDouble("lon", lon)
+        bundle.putInt(ApiMethods.ID, cityId)
+        bundle.putString(ApiMethods.CITY, cityName)
+        bundle.putString(ApiMethods.COUNTRY, country)
         mainFragment.arguments = bundle
         transaction.replace(R.id.container, mainFragment)
         transaction.commit()
-        saveDataOfCity(cityId, cityName, country, lat, lon)
+        saveDataOfCity(cityId, cityName, country)
     }
 
-    private fun saveDataOfCity(cityId: Int, cityName: String, country: String, lat: Double, lon: Double) {
+    private fun saveDataOfCity(cityId: Int, cityName: String, country: String) {
         val pref = (activity as MainActivity).preferences
         val editor = pref?.edit()
-        editor?.putInt("id", cityId)
-        editor?.putString("city", cityName)
-        editor?.putString("country", country)
-        editor?.putFloat("lat", lat.toFloat())
-        editor?.putFloat("lon", lon.toFloat())
+        editor?.putInt(ApiMethods.ID, cityId)
+        editor?.putString(ApiMethods.CITY, cityName)
+        editor?.putString(ApiMethods.COUNTRY, country)
         editor?.apply()
     }
 
@@ -137,17 +132,12 @@ class CityFragment : BaseFragment(), CitiesListener {
         }
     }
 
-    override fun onPause() {
+    override fun onDestroyView() {
         et_change_city.text = null
         et_change_city.hideKeyboard()
-        super.onPause()
-    }
-
-    override fun onDestroyView() {
         rv_city.adapter = null
         super.onDestroyView()
     }
-
 
 //    (при использовании тулбара в активити) лямда с помощью который передаем текст из
 //    edit text activity в адаптер

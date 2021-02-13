@@ -31,8 +31,6 @@ fun View.visible() {
 fun View.gone() {
     this.visibility = View.GONE
 }
-//heightDisplay 2118  cl_transparent.height 404   getStatusBarHeight 63   pxFromDp(view!!.context, 8) 21
-//heightDisplay 2160  cl_transparent.height 423   getStatusBarHeight 145   pxFromDp(view!!.context, 8) 22
 
 fun dpFromPx(context: Context, px: Float): Float {
     return px / context.getResources().getDisplayMetrics().density
@@ -65,30 +63,3 @@ fun doDelayed(time: Long, block: () -> Unit) {
     }, time)
 }
 
-
-fun poshitatDvaPlusDva(myInterface: DvaPlusDvaResult) {
-
-    val value1 = 2
-    val value2 = 2
-    var result = 0
-    result = value1 + value2
-
-    myInterface.onResult(result)
-}
-
-interface DvaPlusDvaResult {
-    fun onResult(value: Int)
-}
-
-
-fun poshitatDvaPlusDvaKotlin(myFunction: (value1: Int, value2: Int) -> Unit) {
-
-    val value1 = 2
-    val value2 = 2
-    var result = 0
-
-    result = value1 + value2
-
-//    myInterface.onResult(result)
-    myFunction(result, value1)
-}

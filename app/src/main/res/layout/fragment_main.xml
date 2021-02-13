@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fl_main"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fl_main"
     android:layout_width="match_parent"
-    android:background="@drawable/background_fragment_main"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_fragment_main">
 
     <ImageView
         android:id="@+id/iv_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/background_app" />
+        android:contentDescription="@string/background_app"
+        android:scaleType="centerCrop" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
@@ -26,9 +26,9 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_main"
-                android:visibility="invisible"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="invisible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_big_weather"
@@ -43,6 +43,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
+
                     <TextView
                         android:id="@+id/tv_temperature"
                         android:layout_width="wrap_content"
@@ -59,6 +60,7 @@
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
                     <TextView
                         android:id="@+id/tv_feels_like"
                         android:layout_width="wrap_content"
@@ -70,6 +72,7 @@
                         app:layout_constraintEnd_toEndOf="@+id/tv_temperature"
                         app:layout_constraintStart_toStartOf="@+id/tv_temperature"
                         app:layout_constraintTop_toBottomOf="@+id/tv_temperature" />
+
                     <TextView
                         android:id="@+id/tv_weather_condition"
                         android:layout_width="wrap_content"
@@ -81,37 +84,40 @@
                         app:layout_constraintEnd_toEndOf="@+id/tv_temperature"
                         app:layout_constraintStart_toStartOf="@+id/tv_temperature"
                         app:layout_constraintTop_toBottomOf="@+id/tv_feels_like" />
+
                     <ImageView
                         android:id="@+id/image_clear_sky"
                         android:layout_width="110dp"
                         android:layout_height="110dp"
                         android:layout_alignParentTop="true"
-                        android:paddingStart="1dp"
-                        android:paddingEnd="15dp"
                         android:layout_toEndOf="@+id/tv_temperature"
                         android:contentDescription="@string/weathericon"
                         android:foregroundGravity="center_horizontal"
+                        android:paddingStart="1dp"
+                        android:paddingEnd="15dp"
                         android:src="@drawable/d_01"
                         android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/tv_temperature"
                         app:layout_constraintTop_toTopOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:id="@+id/ll_detailed_weather"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginEnd="8dp"
-                    android:visibility="visible"
+                    android:background="@drawable/bg_rounded_corners_semi_transparent"
+                    android:baselineAligned="false"
                     android:orientation="horizontal"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cl_big_weather"
-                    android:background="@drawable/bg_rounded_corners_semi_transparent">
+                    app:layout_constraintTop_toBottomOf="@+id/cl_big_weather">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -124,88 +130,93 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:text="Humidity "
-                            android:textColor="@color/color_white"
                             android:drawableStart="@drawable/humidity"
                             android:drawablePadding="10dp"
-                            android:maxLines="1"
                             android:ellipsize="end"
-                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:maxLines="1"
                             android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
+                            android:text="@string/humidity"
+                            android:textColor="@color/color_white"
                             android:textSize="@dimen/ll_detailed_weather_tv_size" />
+
                         <TextView
                             android:id="@+id/tv_cloudiness1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:text="Cloudiness "
-                            android:textColor="@color/color_white"
                             android:drawableStart="@drawable/cloudiness"
                             android:drawablePadding="10dp"
-                            android:maxLines="1"
                             android:ellipsize="end"
-                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:maxLines="1"
                             android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
+                            android:text="@string/cloudiness"
+                            android:textColor="@color/color_white"
                             android:textSize="@dimen/ll_detailed_weather_tv_size" />
+
                         <TextView
                             android:id="@+id/tv_pressure1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:drawablePadding="10dp"
-                            android:text="Pressure "
-                            android:textColor="@color/color_white"
                             android:drawableStart="@drawable/pressure"
-                            android:maxLines="1"
+                            android:drawablePadding="10dp"
                             android:ellipsize="end"
-                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:maxLines="1"
                             android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
+                            android:text="@string/pressure"
+                            android:textColor="@color/color_white"
                             android:textSize="@dimen/ll_detailed_weather_tv_size" />
+
                         <TextView
                             android:id="@+id/tv_wind1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:text="Wind speed "
-                            android:textColor="@color/color_white"
                             android:drawableStart="@drawable/wind"
                             android:drawablePadding="10dp"
-                            android:maxLines="1"
                             android:ellipsize="end"
-                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:maxLines="1"
                             android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
+                            android:text="@string/wind_speed"
+                            android:textColor="@color/color_white"
                             android:textSize="@dimen/ll_detailed_weather_tv_size" />
+
                         <TextView
                             android:id="@+id/tv_visibility1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:text="Visibility "
-                            android:textColor="@color/color_white"
                             android:drawableStart="@drawable/visibility"
                             android:drawablePadding="10dp"
-                            android:maxLines="1"
                             android:ellipsize="end"
-                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
+                            android:maxLines="1"
                             android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
+                            android:text="@string/visibility"
+                            android:textColor="@color/color_white"
                             android:textSize="@dimen/ll_detailed_weather_tv_size" />
+
                         <TextView
                             android:id="@+id/tv_precipitation1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:text="Precipitation"
-                            android:textColor="@color/color_white"
                             android:drawableStart="@drawable/presipitation"
                             android:drawablePadding="10dp"
-                            android:maxLines="1"
                             android:ellipsize="end"
+                            android:maxLines="1"
                             android:padding="@dimen/ll_detailed_weather_tv_padding"
+                            android:text="@string/precipitation"
+                            android:textColor="@color/color_white"
                             android:textSize="@dimen/ll_detailed_weather_tv_size" />
 
                     </LinearLayout>
@@ -215,56 +226,62 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/tv_humidity2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
                             android:textColor="@color/color_white"
                             android:textSize="@dimen/ll_detailed_weather_tv_size" />
+
                         <TextView
                             android:id="@+id/tv_cloudiness2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
                             android:textColor="@color/color_white"
-                            android:textSize="@dimen/ll_detailed_weather_tv_size"/>
+                            android:textSize="@dimen/ll_detailed_weather_tv_size" />
+
                         <TextView
                             android:id="@+id/tv_pressure2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
                             android:textColor="@color/color_white"
-                            android:textSize="@dimen/ll_detailed_weather_tv_size"/>
+                            android:textSize="@dimen/ll_detailed_weather_tv_size" />
+
                         <TextView
                             android:id="@+id/tv_wind2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
                             android:textColor="@color/color_white"
-                            android:textSize="@dimen/ll_detailed_weather_tv_size"/>
+                            android:textSize="@dimen/ll_detailed_weather_tv_size" />
+
                         <TextView
                             android:id="@+id/tv_visibility2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingStart="@dimen/ll_detailed_weather_tv_padding"
+                            android:paddingTop="@dimen/ll_detailed_weather_tv_padding"
                             android:paddingEnd="@dimen/ll_detailed_weather_tv_padding"
                             android:textColor="@color/color_white"
-                            android:textSize="@dimen/ll_detailed_weather_tv_size"/>
+                            android:textSize="@dimen/ll_detailed_weather_tv_size" />
+
                         <TextView
                             android:id="@+id/tv_precipitation2"
                             android:layout_width="wrap_content"
@@ -272,10 +289,9 @@
                             android:layout_gravity="end"
                             android:padding="@dimen/ll_detailed_weather_tv_padding"
                             android:textColor="@color/color_white"
-                            android:textSize="@dimen/ll_detailed_weather_tv_size"/>
+                            android:textSize="@dimen/ll_detailed_weather_tv_size" />
 
                     </LinearLayout>
-
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -287,17 +303,17 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/bg_rounded_corners_semi_transparent"
+                    android:fadeScrollbars="false"
+                    android:scrollbarAlwaysDrawHorizontalTrack="true"
+                    android:scrollbarSize="8dp"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbarThumbHorizontal="@drawable/scrollbar_white"
                     android:scrollbars="horizontal"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ll_detailed_weather"
-                    android:scrollbarSize="8dp"
-                    android:fadeScrollbars="false"
-                    android:scrollbarStyle="insideInset"
-                    android:scrollbarThumbHorizontal="@drawable/scrollbar_white"
-                    android:scrollbarAlwaysDrawHorizontalTrack="true"
                     app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -332,11 +348,11 @@
                 android:id="@+id/tv_change_city"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:textColor="@color/color_white"
                 android:textSize="25sp"
-                android:maxLines="1"
-                android:ellipsize="end"
                 android:visibility="invisible" />
 
         </LinearLayout>
@@ -350,7 +366,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:progress="10"
-        android:visibility="invisible"
-        android:progressDrawable="@drawable/circle"/>
+        android:progressDrawable="@drawable/circle"
+        android:visibility="invisible" />
 
 </FrameLayout>

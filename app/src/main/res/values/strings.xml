@@ -6,10 +6,15 @@
     <string name="cities_fragment_name">Cities:</string>
     <string name="city_fragment_name">City</string>
     <string name="country_fragment_name">Country</string>
-    <string name="details_fragment_name">Details</string>
     <string name="enter_city">enter your city</string>
     <string name="loading">loading…</string>
     <string name="background_app">background_app</string>
+    <string name="humidity">Humidity</string>
+    <string name="cloudiness">Cloudiness</string>
+    <string name="pressure">Pressure</string>
+    <string name="wind_speed">Wind speed</string>
+    <string name="visibility">Visibility</string>
+    <string name="precipitation">Precipitation</string>
 
 
 </resources>

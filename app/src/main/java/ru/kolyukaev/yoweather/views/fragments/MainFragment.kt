@@ -7,6 +7,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.animation.DecelerateInterpolator
 import android.widget.ScrollView
 import android.widget.Toast
@@ -27,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_city.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import ru.kolyukaev.yoweather.R
 import ru.kolyukaev.yoweather.data.models.RwWeatherAfter
+import ru.kolyukaev.yoweather.data.network.api.ApiMethods
 import ru.kolyukaev.yoweather.presenters.MainWeatherPresenter
 import ru.kolyukaev.yoweather.utils.*
 import ru.kolyukaev.yoweather.views.MainWeatherView
@@ -50,15 +52,14 @@ class MainFragment : BaseFragment(), MainWeatherView {
     private var cityId: Int? = null
     private var cityName: String? = null
     private var country: String? = null
-    private var lat: Double? = null
-    private var lon: Double? = null
+
+    private var prompt: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        log("onCreateView (MainFragment)")
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
@@ -75,15 +76,14 @@ class MainFragment : BaseFragment(), MainWeatherView {
 
         rv_weather_hours.layoutManager = mLayoutManager
 
-        swipe_refresh_layout.setOnRefreshListener {
-            mainWeatherPresenter.loadDataOfCity(cityId!!, lat!!, lon!!)
-            swipe_refresh_layout.isRefreshing = false
+        if (checkBundleData() || checkPreferenceData()) {
+            mainWeatherPresenter.loadDataOfCity(cityId!!)
+            showCityAndCountry(cityName, country)
         }
 
-
-        if (checkBundleData() || checkPreferenceData()) {
-            mainWeatherPresenter.loadDataOfCity(cityId!!, lat!!, lon!!)
-            showCityAndCountry(cityName, country)
+        swipe_refresh_layout.setOnRefreshListener {
+            mainWeatherPresenter.loadDataOfCity(cityId!!)
+            swipe_refresh_layout.isRefreshing = false
         }
 
         toolbar_main_fragment.inflateMenu(R.menu.city_info_menu)
@@ -95,79 +95,77 @@ class MainFragment : BaseFragment(), MainWeatherView {
             return@setOnMenuItemClickListener true
         }
 
-        tv_change_city.setOnClickListener {
+        toolbar_main_fragment.setOnClickListener {
             (mainActivity).commitFragmentTransaction(CityFragment())
         }
 
-        animationHandler = Handler()
-        doDelayed(3000) {
-//            startRepeatingTask()
-        }
+        if (prompt == false) {
+            scroll_view.viewTreeObserver
+                .addOnScrollChangedListener(scrollListener)
 
-        poshitatDvaPlusDva(object : DvaPlusDvaResult {
-            override fun onResult(value: Int) {
-                log("NASH_RESULTAT $value")
+            animationHandler = Handler()
+
+            doDelayed(3000) {
+                startRepeatingTask()
             }
-        })
-
-        poshitatDvaPlusDva(dvaPlusDvaObject)
-
-        poshitatDvaPlusDvaKotlin { value, value2 ->
-            log("NASH_RESULTAT_KOTLIN ${value}")
         }
 
-//        doDelayed(2500) {
-//            hintWeatherAnimation()
-//            doDelayed(350) {
-//                hintWeatherAnimation()
-//            }
-//        }
     }
 
-    var dvaPlusDvaObject = object : DvaPlusDvaResult {
-        override fun onResult(value: Int) {
-            log("NASH_RESULTAT 2 $value")
+    private fun startRepeatingTask() {
+        animationRunnable.run()
+    }
+
+    var animationRunnable: Runnable = object : Runnable {
+        override fun run() {
+            try {
+                hintWeatherAnimation()
+                doDelayed(330) {
+                    hintWeatherAnimation()
+                }
+            } finally {
+                animationHandler.postDelayed(this, animationInterval)
+            }
         }
     }
-//
-//    var animationRunnable: Runnable = object : Runnable {
-//        override fun run() {
-//            try {
-//                hintWeatherAnimation()
-//                doDelayed(330) {
-//                    hintWeatherAnimation()
-//                }
-//            } finally {
-//                animationHandler.postDelayed(this, animationInterval)
-//                stopRepeatingTask()
-//            }
-//        }
-//    }
-//
-//    private fun startRepeatingTask() {
-//        animationRunnable.run()
-//    }
-//
-//    private fun stopRepeatingTask() {
-//        animationHandler.removeCallbacks(animationRunnable)
-//    }
+
+    private fun stopRepeatingTask() {
+        animationHandler.removeCallbacks(animationRunnable)
+    }
+
+    private var scrollListener = object : ViewTreeObserver.OnScrollChangedListener {
+        override fun onScrollChanged() {
+            if (scroll_view != null && scroll_view.getChildAt(0).bottom <= (scroll_view.height + scroll_view.scrollY)) {
+                //scroll view is at bottom
+                stopRepeatingTask()
+                saveStateOfPrompt()
+            }
+        }
+    }
+
+    private fun saveStateOfPrompt() {
+        val pref = mainActivity.preferences
+        val editor = pref?.edit()
+        editor?.putBoolean(ApiMethods.PROMPT, true)
+        editor?.apply()
+    }
 
     private fun checkBundleData(): Boolean {
-        cityId = arguments?.getInt("id")
-        cityName = arguments?.getString("name")
-        country = arguments?.getString("country")
-        lat = arguments?.getDouble("lat")
-        lon = arguments?.getDouble("lon")
+        log("checkBundleData")
+        cityId = arguments?.getInt(ApiMethods.ID)
+        cityName = arguments?.getString(ApiMethods.CITY)
+        country = arguments?.getString(ApiMethods.COUNTRY)
+        prompt = mainActivity.preferences?.getBoolean("prompt",false)!!
         return cityId != null
     }
 
     private fun checkPreferenceData(): Boolean {
+        log("checkPreferenceData()")
         val mainActivity = activity as MainActivity
-        cityId = mainActivity.preferences?.getInt("id", 0)!!
-        cityName = mainActivity.preferences?.getString("city", "")
-        country = mainActivity.preferences?.getString("country", "")
-        lat = mainActivity.preferences?.getFloat("lat", 0f)!!.toDouble()
-        lon = mainActivity.preferences?.getFloat("lon", 0f)!!.toDouble()
+        cityId = mainActivity.preferences?.getInt(ApiMethods.ID, 0)!!
+        cityName = mainActivity.preferences?.getString(ApiMethods.CITY, "")
+        country = mainActivity.preferences?.getString(ApiMethods.COUNTRY, "")
+        prompt = mainActivity.preferences?.getBoolean(ApiMethods.PROMPT,false)!!
         return cityId != 0
     }
 
@@ -219,16 +217,6 @@ class MainFragment : BaseFragment(), MainWeatherView {
         pb_loading_weather.visibility = View.INVISIBLE
     }
 
-    override fun showHintWeatherAnimation() {
-        log("showHintWeatherAnimation")
-        doDelayed(700) {
-            hintWeatherAnimation()
-            doDelayed(350) {
-                hintWeatherAnimation()
-            }
-        }
-    }
-
     private fun hintWeatherAnimation() {
         cl_big_weather?.animate()
             ?.setDuration(100)
@@ -250,11 +238,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
     }
 
     override fun showComponents() {
-        log("showComponents")
-        log("TESTTEST")
-
         cl_main.visible()
-        showHintWeatherAnimation()
         setIndentTopAndBottom()
     }
 
@@ -298,12 +282,14 @@ class MainFragment : BaseFragment(), MainWeatherView {
     }
 
     private fun getColorFromBitmap(bitmap: Bitmap) {
-        Palette.from(bitmap).generate { palette ->
-            val vibrantSwatch = palette?.darkMutedSwatch
-            val backgroundColor =
-                vibrantSwatch?.rgb ?: ContextCompat.getColor(requireContext(), R.color.color_crystal)
-            setAccentColorViews(backgroundColor)
-        }
+        Palette.from(bitmap)
+            .maximumColorCount(64)
+            .generate { palette ->
+                val vibrantSwatch = palette?.darkMutedSwatch
+                val backgroundColor =
+                    vibrantSwatch?.rgb ?: ContextCompat.getColor(requireContext(), R.color.color_crystal)
+                setAccentColorViews(backgroundColor)
+            }
     }
 
     private fun colorStateListOf(color: Int): ColorStateList {
@@ -333,10 +319,11 @@ class MainFragment : BaseFragment(), MainWeatherView {
         tv_precipitation2.text = precipitation
     }
 
+
     override fun onDestroyView() {
         rv_weather_hours.adapter = null
+        scroll_view.viewTreeObserver.removeOnScrollChangedListener(scrollListener)
 
-//        stopRepeatingTask()
         super.onDestroyView()
     }
 

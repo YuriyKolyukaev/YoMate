@@ -45,10 +45,10 @@ class CityAdapter(
             val cityId = mCityList[currentPosition].id
             val cityName = mCityList[currentPosition].name
             val country = mCityList[currentPosition].country
-            val lat = mCityList[currentPosition].coord.lat
-            val lon = mCityList[currentPosition].coord.lon
-            log("idCity = $cityId, country = $country  coord = ${mCityList[currentPosition].coord}")
-            listener.onItemClick(cityId, cityName, country, lat, lon)
+//            val lat = mCityList[currentPosition].coord.lat
+//            val lon = mCityList[currentPosition].coord.lon
+//            log("idCity = $cityId, country = $country  coord = ${mCityList[currentPosition].coord}")
+            listener.onItemClick(cityId, cityName, country)
         }
         return viewHolder
     }
@@ -67,13 +67,12 @@ class CityAdapter(
     class CityViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var mTvCityCell: TextView = itemView.tv_city_cell
         private var mTvCountry: TextView = itemView.tv_country_cell
-        private var mTvState: TextView = itemView.tv_state_cell
 
 
         fun bind(cityModel: City, context: Context?) {
             mTvCityCell.text = cityModel.name
             mTvCountry.text = cityModel.country
-            mTvState.text = cityModel.state
+//            mTvState.text = cityModel.state
         }
     }
 

@@ -10,7 +10,6 @@ interface MainWeatherView: MvpView {
     fun startLoading()
     fun endLoading()
     fun showComponents()
-    fun showHintWeatherAnimation()
     fun setIndentTopAndBottom()
     fun showError(text: String)
     fun replaceBackground(photoString: String)

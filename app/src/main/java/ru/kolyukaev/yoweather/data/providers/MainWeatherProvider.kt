@@ -37,6 +37,10 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
                     val weatherResponse = response.body()!!
                     log("weatherResponse = $weatherResponse)")
 
+                    val lat = weatherResponse.city?.coord?.lat ?: 0.0
+                    val lon = weatherResponse.city?.coord?.lon ?: 0.0
+                    loadPhoto(lat,lon)
+
                     val mainWeatherList: ArrayList<MainWeatherModel> = ArrayList()
 
                     val mainWeather = MainWeatherModel(
@@ -81,9 +85,9 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
         val call: Call<DataOfCityResponse> = placesService.getDataOfCity(
             key = ApiMethods.KEYG,
             location = location,
-            rankby = ApiMethods.rankby,
-            keyword = ApiMethods.name,
-            radius = ApiMethods.radius
+            rankby = ApiMethods.RANKBY,
+            keyword = ApiMethods.NAME,
+            radius = ApiMethods.RADIUS
         )
 
         call.enqueue(object : Callback<DataOfCityResponse> {
@@ -129,7 +133,7 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
             val photoReference = it?.photos?.firstOrNull()?.photoReference ?: ""
             val photoHeight = it?.photos?.firstOrNull()?.height ?: 0
             val photoWidth = it?.photos?.firstOrNull()?.width ?: 0
-            if (photoReference != "" && photoHeight >= 600 && photoWidth >= 600) {
+            if (photoReference != "" && photoHeight >= ApiMethods.PHOTO_HEIGHT && photoWidth >= ApiMethods.PHOTO_WIDTH) {
                 val photo = PhotoOfCityModel(
                     photoReference = photoReference
                 )
@@ -142,7 +146,7 @@ class MainWeatherProvider(var presenter: MainWeatherPresenter) {
     fun getPhotoString(photoReference: String): String {
         val photoUrl = placesService.getPhoto(
             key = ApiMethods.KEYG,
-            maxWidth = ApiMethods.maxWidth,
+            maxWidth = ApiMethods.MAXWIDTH,
             photoReference = photoReference
         ).request().url
         return photoUrl.toString()
