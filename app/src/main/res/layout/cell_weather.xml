@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:divider="@drawable/separator"
+    android:dividerPadding="5dp"
+    android:orientation="horizontal"
+    android:showDividers="end">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_hour_dt_txt_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/rv_weather_hours_tv_size"
+            android:paddingStart="@dimen/rv_weather_hours_tv_padding"
+            android:paddingEnd="@dimen/rv_weather_hours_tv_size"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="text"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/rv_weather_hours_tv_size" />
+
+        <TextView
+            android:id="@+id/tv_hour_dt_txt_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingStart="@dimen/rv_weather_hours_tv_padding"
+            android:paddingEnd="@dimen/rv_weather_hours_tv_size"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="text"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/rv_weather_hours_tv_size" />
+
+        <TextView
+            android:id="@+id/tv_hour_temp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingStart="@dimen/rv_weather_hours_tv_padding"
+            android:paddingEnd="@dimen/rv_weather_hours_tv_size"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="text"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/rv_weather_hours_tv_size" />
+
+        <ImageView
+            android:id="@+id/iv_hour_icon"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:paddingTop="8dp"
+            android:paddingStart="@dimen/rv_weather_hours_tv_padding"
+            android:paddingEnd="@dimen/rv_weather_hours_tv_size"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/tv_hour_humidity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingStart="@dimen/rv_weather_hours_tv_padding"
+            android:paddingEnd="@dimen/rv_weather_hours_tv_size"
+            android:paddingBottom="@dimen/rv_weather_hours_tv_size"
+            android:gravity="center_horizontal"
+            android:text="text"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/rv_weather_hours_tv_size" />
+
+    </LinearLayout>
+
+</LinearLayout>
