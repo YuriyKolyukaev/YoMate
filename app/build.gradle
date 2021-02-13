@@ -74,10 +74,10 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.6.2"
 
-    // rxandroid
+    // rxjava
     implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
 
-//    // Leak Canary
+//    Leak Canary
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
 
     // SwipeRefreshLayout
