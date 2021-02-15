@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.cell_city.view.*
 import ru.kolyukaev.yoweather.R
 import ru.kolyukaev.yoweather.data.models.City
-import ru.kolyukaev.yoweather.utils.log
 
 class CityAdapter(
     private val context: Context,
@@ -45,9 +44,6 @@ class CityAdapter(
             val cityId = mCityList[currentPosition].id
             val cityName = mCityList[currentPosition].name
             val country = mCityList[currentPosition].country
-//            val lat = mCityList[currentPosition].coord.lat
-//            val lon = mCityList[currentPosition].coord.lon
-//            log("idCity = $cityId, country = $country  coord = ${mCityList[currentPosition].coord}")
             listener.onItemClick(cityId, cityName, country)
         }
         return viewHolder

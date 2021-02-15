@@ -138,13 +138,4 @@ class CityFragment : BaseFragment(), CitiesListener {
         rv_city.adapter = null
         super.onDestroyView()
     }
-
-//    (при использовании тулбара в активити) лямда с помощью который передаем текст из
-//    edit text activity в адаптер
-//    private fun setEditTextChangeListener() {
-//        (activity as? MainActivity?)?.onToolbarTextChanged = { text ->
-//            mAdapter.filter(text)
-//        }
-//    }
-
 }

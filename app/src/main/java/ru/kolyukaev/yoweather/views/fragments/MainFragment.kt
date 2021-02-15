@@ -251,7 +251,6 @@ class MainFragment : BaseFragment(), MainWeatherView {
             .asBitmap()
             .load(photoString)
             .placeholder(iv_background.drawable)
-            // плавная смена картинки
             .listener(object : RequestListener<Bitmap> {
                 override fun onLoadFailed(
                     e: GlideException?,
@@ -277,6 +276,7 @@ class MainFragment : BaseFragment(), MainWeatherView {
                     return false
                 }
             })
+            // плавная смена картинки
             .transition(BitmapTransitionOptions.withCrossFade())
             .into(iv_background)
     }
